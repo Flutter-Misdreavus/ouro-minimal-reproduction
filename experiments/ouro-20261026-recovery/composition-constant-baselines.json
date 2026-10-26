@@ -1,0 +1,10 @@
+{
+  "L4_primary": {
+    "n": 2048,
+    "always_zero_accuracy": 0.06591796875
+  },
+  "L2_heldout": {
+    "n": 1024,
+    "always_zero_accuracy": 0.0703125
+  }
+}
