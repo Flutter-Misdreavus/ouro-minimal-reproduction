@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "run_id": "ouro-20261026-atomic",
+  "parent_run_id": "ouro-20261026-mano-extended-r2",
+  "ready": true,
+  "hypothesis": "Original failures may reflect optimization/difficulty rather than capacity or FP16 failure. A full single-operation training fit separates these explanations.",
+  "baseline": "3-layer single-loop original width-256 model, lr=0.0002",
+  "intervention": "2x2 learning rate (0.0002/0.002) and precision (FP16/FP32), otherwise identical atomic task",
+  "dataset": "All 1587 ordered one-operation expressions over F23; original token format and independent formula/oracle checks",
+  "split": "Per operator fixed shuffle seed4242: 423 train,53 validation,53 reserved test; new models trained from scratch; original length10 test untouched",
+  "primary_metric": "Full atomic training accuracy at step4000, higher is better; validation and operator scores secondary",
+  "decision_rule": "Training accuracy >=99% establishes basic fit; validation >=50% establishes useful atomic generalization for this diagnostic only. Compare paired LR and precision changes >=10 percentage points. Do not expand to long expressions until fit gate passes. Choose follow-up by validation CE among fit-passing configurations, then freeze a separate task.",
+  "controls": [
+    "same model initialization",
+    "same sampled training indices",
+    "same disjoint splits",
+    "same width/batch/step count/schedule",
+    "original final-answer-only objective",
+    "one local GPU, serial jobs"
+  ],
+  "seeds": [
+    0
+  ],
+  "code_revision": "Record clean git HEAD at each launch",
+  "environment": "Existing isolated environment, V10032GB, PyTorch2.2.2+cu121",
+  "experiment_commands": [
+    "python -m scripts.run_matrix --config configs/atomic_matrix.json"
+  ],
+  "budget": {
+    "gpu_count": 1,
+    "gpu_hours": 1.42,
+    "wall_seconds": 5100,
+    "max_attempts": 1,
+    "model_cost_limit": 0
+  },
+  "stop_conditions": [
+    "nonfinite loss",
+    "nonfinite FP32 gradient",
+    "more than20 FP16 skips",
+    "OOM",
+    "time budget",
+    "split overlap"
+  ],
+  "required_outputs": [
+    "all four reports and histories",
+    "initialization/split/sampler hashes",
+    "review and next-stage decision"
+  ],
+  "version_control": {
+    "repository": "Flutter-Misdreavus/ouro-minimal-reproduction",
+    "visibility": "public",
+    "visibility_authorization": "Existing explicit user authorization for public reproduction repository",
+    "branch": "main",
+    "push_mode": "direct",
+    "checkpoint_minutes": 15
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "run_id": "ouro-20261026-atomic-smoke",
+  "seed": 0,
+  "layers": 3,
+  "loops": 1,
+  "width": 256,
+  "heads": 4,
+  "lr": 0.0002,
+  "precision": "fp16",
+  "steps": 40,
+  "batch_size": 256,
+  "warmup_steps": 10,
+  "eval_every": 20,
+  "wall_seconds": 120
+}

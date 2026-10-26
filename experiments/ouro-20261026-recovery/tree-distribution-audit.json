@@ -1,0 +1,10 @@
+{
+  "catalan": {
+    "expected_height_at_10_ops": 7.071207430340558,
+    "probability_root_has_leaf_child_at_10_ops": 0.5789473684210527
+  },
+  "uniform_split": {
+    "expected_height_at_10_ops": 5.641093474426808,
+    "probability_root_has_leaf_child_at_10_ops": 0.2
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "run_id": "ouro-20261026-atomic",
+  "output_root": "runtime/atomic-probe",
+  "wall_seconds": 5100,
+  "runs": [
+    {
+      "name": "fp16_low",
+      "args": [
+        "-m",
+        "ouro_repro.atomic_probe",
+        "--config",
+        "configs/atomic_fp16_low.json"
+      ],
+      "timeout_seconds": 1250
+    },
+    {
+      "name": "fp16_high",
+      "args": [
+        "-m",
+        "ouro_repro.atomic_probe",
+        "--config",
+        "configs/atomic_fp16_high.json"
+      ],
+      "timeout_seconds": 1250
+    },
+    {
+      "name": "fp32_low",
+      "args": [
+        "-m",
+        "ouro_repro.atomic_probe",
+        "--config",
+        "configs/atomic_fp32_low.json"
+      ],
+      "timeout_seconds": 1250
+    },
+    {
+      "name": "fp32_high",
+      "args": [
+        "-m",
+        "ouro_repro.atomic_probe",
+        "--config",
+        "configs/atomic_fp32_high.json"
+      ],
+      "timeout_seconds": 1250
+    }
+  ]
+}

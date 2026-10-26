@@ -1,0 +1,15 @@
+{
+  "run_id": "ouro-20261026-atomic-fp16_low",
+  "seed": 0,
+  "layers": 3,
+  "loops": 1,
+  "width": 256,
+  "heads": 4,
+  "lr": 0.0002,
+  "precision": "fp16",
+  "steps": 4000,
+  "batch_size": 256,
+  "warmup_steps": 200,
+  "eval_every": 500,
+  "wall_seconds": 1200
+}
