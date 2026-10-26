@@ -10,20 +10,20 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.2.2-EE4C2C?style=flat-square)](requirements.txt)
 [![Hardware](https://img.shields.io/badge/GPU-1%C3%97_V100_32GB-76B900?style=flat-square)](#resources)
 
-[实验结果](#results) · [方法与对照](#method) · [快速复现](#quickstart) · [实验记录](#evidence) · [结论边界](#limitations)
+[实验结果](#results) · [追加诊断](#recovery) · [方法与对照](#method) · [快速复现](#quickstart) · [实验记录](#evidence) · [结论边界](#limitations)
 
 </div>
 
 ---
 
-> **本轮结论**：公开权重的循环深度趋势已复现；小模型训练对照已完成，但学习不足，尚未证明循环训练优势。这里同时保留成功结果、未达预期的结果和实际运行版本。
+> **当前结论**：公开权重的循环深度趋势已复现。首轮小模型学习不足；追加 11 组训练后，在缩小的四次运算任务上观察到循环模型 **24.66%**、浅层 **9.08%**、深层 **9.47%** 的单种子差异。完整论文训练结论仍未复现，以下保留各阶段证据与局限。
 
 这是论文的**独立、非官方最小复现**，包含两条实验线：
 
 | 实验线 | 核心问题 | 本轮结果 |
 |---|---|---|
 | **公开权重验证** | 同一 Ouro-1.4B 检查点，增加循环次数是否改善表现？ | 两项完整基准均重现先升后降的深度趋势 |
-| **小模型训练对照** | 共享权重循环，是否优于同参数量或同展开深度模型？ | 三组完成训练，但尚未通过有效学习的阶段门 |
+| **小模型训练对照** | 共享权重循环，是否优于同参数量或同展开深度模型？ | 追加诊断恢复短组合学习，出现单种子收益迹象；尚未通过确认阶段门 |
 
 <a id="results"></a>
 
@@ -56,7 +56,7 @@
 
 [完整审查](experiments/ouro-20261026-depth-full/review.md) · [机器可读指标](experiments/ouro-20261026-depth-full/depth-report.json) · [配对统计](experiments/ouro-20261026-depth-full/paired-comparisons.json) · [矢量图 SVG](experiments/ouro-20261026-depth-full/depth-curves.svg)
 
-### 小模型：对照完成，学习信号不足
+### 首轮小模型：对照完成，学习信号不足
 
 在模 23 的前缀算术任务 Mano 上，三组模型均从头训练 **20,000 步**，各消耗相同的 **81,929,878 个非填充 token**、**5,120,000 道表达式**。以下为固定训练终点的长度 10 验证准确率，未挑选曲线中的最高点。
 
@@ -73,9 +73,67 @@
 
 [训练审查与局限](experiments/ouro-20261026-mano-extended/review.md) · [代码及配置审计](experiments/ouro-20261026-mano-extended/provenance-audit.json) · [矢量图 SVG](experiments/ouro-20261026-mano-extended/training-curves.svg)
 
+<a id="recovery"></a>
+
+### 追加诊断：从基本运算拟合，推进到组合学习
+
+新增 **11 组正式训练**，按三个阶段检查首轮失败原因：
+
+| 阶段 | 对照 | 观察与决定 |
+|---|---|---|
+| 单步学习 | 2 档学习率 × FP16/FP32 | 四组均能拟合训练集到 100%；没有证据把失败简单归因于 FP16 |
+| 长度 10 数据对照 | 原树分布/官方式分布 × 有无单步预热 | 主验证准确率仍为 6.74%–7.91%，未通过有效学习门槛 |
+| 缩小的组合任务 | 浅层/循环/深层，统一渐进课程 | 三组都恢复短组合学习，循环模型在此单种子设置中表现更好 |
+
+还确认了一个分布偏差：原始 Mano 作者代码均匀采样左右子树的运算数划分，首轮代码均匀采样完整树形状。10 次运算时平均树高分别为 **5.64** 和 **7.07**。现在已增加 `uniform_split` 选项，并保留原默认数据流用于历史重放；修正分布本身尚不足以恢复长度 10 的学习。
+
+新的机制试验将任务缩为最多 **4 次运算**，三组均训练 20,000 步，采用相同的“单步 → 最多两步 → 最多四步”课程和数据流。
+
+| 模型 | 参数量 | 两步保留验证集 | 四步主验证集 |
+|---|---:|---:|---:|
+| Shallow · 3 层 × 1 次 | 2.38M | 64.06% | 9.08% |
+| **Loop · 3 层 × 4 次** | **2.38M** | **76.37%** | **24.66%** |
+| Deep · 12 层 × 1 次 | 9.49M | 57.91% | 9.47% |
+| 始终答 0 | — | 7.03% | 6.59% |
+
+![渐进课程下的四步主验证、两步保留验证和单步拟合曲线](experiments/ouro-20261026-recovery/architecture-curves.png)
+
+三个检查点的六项 L2/L4 分数均通过独立复算。四步任务上，循环模型相对浅层和深层分别提升 **15.58**、**15.19** 个百分点；答案非零的题目上准确率为 **22.58%**，改善并非仅靠多预测零。
+
+**这仍是探索性结果。** 任务难度与原论文不同，只有一个种子，超参数不保证对每种架构分别最优。循环模型未达到预设的 50% 有效学习门槛，因此没有追加多种子确认，长度 10 和长度 4 的预留测试集都未评分。曲线支持继续研究训练预算与组合学习，不支持宣称完整复现成功。
+
+[失败分析与完整审查](experiments/ouro-20261026-recovery/review.md) · [单步对照](experiments/ouro-20261026-recovery/atomic-review.md) · [数据对照](experiments/ouro-20261026-recovery/data-review.md) · [逐题复算及配对区间](experiments/ouro-20261026-recovery/composition-verification.json) · [版本审计](experiments/ouro-20261026-recovery/composition-source-audit.json)
+
+<details>
+<summary><strong>重放追加诊断与组合试验</strong></summary>
+
+仅运行这些合成任务时，可跳过公开权重与 ARC/Winogrande 数据下载。安装环境后，在干净工作区中按阶段运行、检查报告，再进入下一阶段；输出目录应是新目录。
+
+```bash
+python -m scripts.run_matrix --config configs/atomic_matrix.json
+python -m scripts.run_matrix --config configs/recovery_data_matrix.json
+python -m scripts.run_matrix --config configs/composition_matrix.json
+
+python scripts/report_recovery.py \
+  --atomic-directory runtime/atomic-probe \
+  --data-directory runtime/recovery-data \
+  --architecture-directory runtime/composition-s0 \
+  --output runtime/recovery-analysis
+
+python -m scripts.verify_composition \
+  --directory runtime/composition-s0 \
+  --output runtime/composition-verification
+```
+
+11 组正式训练报告记录的训练/评估耗时合计约 **62.6 分钟**，不含准备、CPU 检查、GPU 冒烟与独立重新评分。任务书中的预算上限、原始运行提交和阶段决定均保留在 `experiments/ouro-20261026-recovery/`。
+
+</details>
+
 <a id="method"></a>
 
 ## 02 · 方法与对照
+
+本节描述首轮协议；追加诊断的树分布、课程和更小的任务难度见[追加诊断](#recovery)，两轮结果分别解释。
 
 循环模型在隐状态中重复应用同一组 Transformer 参数，让一个 token 在输出前经历更多计算。
 

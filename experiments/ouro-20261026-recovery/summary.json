@@ -1,0 +1,44 @@
+{
+  "run_id": "ouro-20261026-recovery",
+  "execution_status": "SUCCEEDED",
+  "scientific_status": "EXPLORATORY_PROGRESS_NOT_FULL_REPLICATION",
+  "stages": {
+    "atomic": {
+      "completed_runs": 4,
+      "elapsed_seconds_sum": 195.03671363648027,
+      "run_commits": {
+        "ouro-20261026-atomic-fp16_low": "687dd831b961192759d211ab6a10756f42fdf649",
+        "ouro-20261026-atomic-fp16_high": "687dd831b961192759d211ab6a10756f42fdf649",
+        "ouro-20261026-atomic-fp32_high": "687dd831b961192759d211ab6a10756f42fdf649",
+        "ouro-20261026-atomic-fp32_low": "687dd831b961192759d211ab6a10756f42fdf649"
+      }
+    },
+    "data": {
+      "completed_runs": 4,
+      "elapsed_seconds_sum": 1271.3108420283534,
+      "run_commits": {
+        "ouro-20261026-recovery-catalan_mixed": "87334f7844d7c11d78494ba55500e45cb0cfd1aa",
+        "ouro-20261026-recovery-uniform_split_mixed": "1a811f89b2d9bd66a8d0f7b9aef87baa2c1eb67b",
+        "ouro-20261026-recovery-uniform_split_primed": "7bb77952958b592e2df8570a06ef6a7dafae4224",
+        "ouro-20261026-recovery-catalan_primed": "4b57e189c93b7c5e1a6c247abbf0708ffc27f621"
+      }
+    },
+    "composition": {
+      "completed_runs": 3,
+      "elapsed_seconds_sum": 2287.696378149092,
+      "run_commits": {
+        "ouro-20261026-composition-shallow-s0": "a6870104b77e24515b6e9f424f4d1e82e8ab547f",
+        "ouro-20261026-composition-loop-s0": "149119a36d60b542e645d4d7397d830a69dc9c1a",
+        "ouro-20261026-composition-deep-s0": "e0551d9098f4bfc4283293e05ce998d305eeb4a9"
+      }
+    }
+  },
+  "measured_training_evaluation_seconds_sum": 3754.043933813926,
+  "timing_note": "Excludes setup, CPU tests, three GPU smoke runs and independent rescoring",
+  "related_cpu_tests_passed": 7,
+  "independent_checkpoint_rescoring": "all six L2/L4 accuracy values exactly matched",
+  "learning_gate_50pct_passed": false,
+  "additional_seeds_launched": false,
+  "original_L10_and_new_L4_tests_scored": false,
+  "report_generation_commit": "924bd29ec8290b9ffc38c88b55dfe8590e4186fa"
+}

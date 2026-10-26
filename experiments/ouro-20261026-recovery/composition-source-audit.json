@@ -1,0 +1,42 @@
+{
+  "run_commits": {
+    "shallow_s0": "a6870104b77e24515b6e9f424f4d1e82e8ab547f",
+    "loop_s0": "149119a36d60b542e645d4d7397d830a69dc9c1a",
+    "deep_s0": "e0551d9098f4bfc4283293e05ce998d305eeb4a9"
+  },
+  "core_source_sha256": {
+    "ouro_repro/model.py": "52581c7c87f0482919a067ace17a5ce5462fcbafbdcfb29329f54263cd884171",
+    "ouro_repro/mano.py": "2326976f78d06ee2df6f77980495d6e6165ed31297f916e2186e7969fa4e0df0",
+    "ouro_repro/recover_train.py": "94f810a17bb936068e1417e84902e709649f22c770c28ffb7833bb8f6df52bd7",
+    "ouro_repro/train.py": "0980f89a481eb400fd5f2639e71711280d991653f1a57b5b8fba7af276c7d66c"
+  },
+  "config_sha256": {
+    "shallow_s0": "3605c578fdb6a07f0045793c156f5f71071798a06384405c6bc5b8e9b27b5482",
+    "loop_s0": "b0875e4c47a9e16f0a9c619ae2335ee946e5c701fc24508572f8a8aca8e81310",
+    "deep_s0": "44aa60e94d4c0b1e4b29a9c3dd9d9b1edac1eecf7b1c95c3faa5e0631b924ac2"
+  },
+  "validation_sha256": "210bedb48ec2bafcb6007f274d4630ec20f4d72c5a8bfc38a0c08ed721d285ec",
+  "legacy_validation_sha256": "41ecefb70c0007e186619bd8fa1b3ee9afa19aa50f112bcab20066c65e457969",
+  "reserved_test_sha256": "6beb4891d3aef28e87d798f6d47e530a01b778e52bfba8b1fe1293063a0517f9",
+  "diagnostic_sha256": {
+    "1": "2a7486ebdc41749c0ef44e6b271b3117267d6df51afd23b0ad85e778cd39fc5d",
+    "2": "a61468daad1c5bb8567df5fc4f9f3f9bedb46f18e9f92d1dd5c911bc2c2c0c92",
+    "4": "73548d6dd5665a885c7e84ae5c29391a732bdf4d375469bfe459f4fd58d6cd39"
+  },
+  "shallow_loop_initialization_identical": true,
+  "report_generation_commit": "924bd29ec8290b9ffc38c88b55dfe8590e4186fa",
+  "train_stream_sha256": "b3f618770b2cc69edc20bc3abb6fe401a72c745272b289f69d85cc4feaccc9c8",
+  "nonpad_tokens_each": 45056826,
+  "length_counts_each": {
+    "1": 2434651,
+    "2": 1403531,
+    "3": 640572,
+    "4": 641246
+  },
+  "steps_each": 20000,
+  "checkpoint_sha256": {
+    "shallow_s0": "34096fe0578c6849d11e420177564500b26c62a8042af21507c3402bf530807c",
+    "loop_s0": "d49d28227d2c5cf967b974fa444f95d6c958f02f88090549a8c2cb940acfdb59",
+    "deep_s0": "e14d0e89325e172c4878681cc0a618b09519c29781614c5000dacbb26b7ccd69"
+  }
+}

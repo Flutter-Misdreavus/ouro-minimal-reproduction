@@ -1,0 +1,281 @@
+{
+  "verification_commit": "c984c50bd3d2118b3ed26e49577d5cefe7f6981b",
+  "device": "Tesla V100-SXM2-32GB",
+  "precision": "fp32",
+  "runs": {
+    "deep_s0": {
+      "run_commit": "e0551d9098f4bfc4283293e05ce998d305eeb4a9",
+      "metrics": {
+        "L4": {
+          "n": 2048,
+          "accuracy": 0.0947265625,
+          "groups": {
+            "tree_height": {
+              "3": {
+                "n": 1384,
+                "accuracy": 0.09826589595375723
+              },
+              "4": {
+                "n": 664,
+                "accuracy": 0.08734939759036145
+              }
+            },
+            "root_operator": {
+              "add": {
+                "n": 677,
+                "accuracy": 0.0827178729689808
+              },
+              "mul": {
+                "n": 669,
+                "accuracy": 0.11958146487294469
+              },
+              "sub": {
+                "n": 702,
+                "accuracy": 0.08262108262108261
+              }
+            },
+            "answer_is_zero": {
+              "False": {
+                "n": 1913,
+                "accuracy": 0.06325143753267119
+              },
+              "True": {
+                "n": 135,
+                "accuracy": 0.5407407407407407
+              }
+            }
+          }
+        },
+        "L2": {
+          "n": 1024,
+          "accuracy": 0.5791015625,
+          "groups": {
+            "tree_height": {
+              "2": {
+                "n": 1024,
+                "accuracy": 0.5791015625
+              }
+            },
+            "root_operator": {
+              "add": {
+                "n": 334,
+                "accuracy": 0.7125748502994012
+              },
+              "mul": {
+                "n": 364,
+                "accuracy": 0.3543956043956044
+              },
+              "sub": {
+                "n": 326,
+                "accuracy": 0.6932515337423313
+              }
+            },
+            "answer_is_zero": {
+              "False": {
+                "n": 952,
+                "accuracy": 0.5619747899159664
+              },
+              "True": {
+                "n": 72,
+                "accuracy": 0.8055555555555556
+              }
+            }
+          }
+        }
+      }
+    },
+    "loop_s0": {
+      "run_commit": "149119a36d60b542e645d4d7397d830a69dc9c1a",
+      "metrics": {
+        "L4": {
+          "n": 2048,
+          "accuracy": 0.24658203125,
+          "groups": {
+            "tree_height": {
+              "3": {
+                "n": 1384,
+                "accuracy": 0.26083815028901736
+              },
+              "4": {
+                "n": 664,
+                "accuracy": 0.21686746987951808
+              }
+            },
+            "root_operator": {
+              "add": {
+                "n": 677,
+                "accuracy": 0.3205317577548006
+              },
+              "mul": {
+                "n": 669,
+                "accuracy": 0.16890881913303438
+              },
+              "sub": {
+                "n": 702,
+                "accuracy": 0.2492877492877493
+              }
+            },
+            "answer_is_zero": {
+              "False": {
+                "n": 1913,
+                "accuracy": 0.22582331416623105
+              },
+              "True": {
+                "n": 135,
+                "accuracy": 0.5407407407407407
+              }
+            }
+          }
+        },
+        "L2": {
+          "n": 1024,
+          "accuracy": 0.763671875,
+          "groups": {
+            "tree_height": {
+              "2": {
+                "n": 1024,
+                "accuracy": 0.763671875
+              }
+            },
+            "root_operator": {
+              "add": {
+                "n": 334,
+                "accuracy": 0.7694610778443114
+              },
+              "mul": {
+                "n": 364,
+                "accuracy": 0.7802197802197802
+              },
+              "sub": {
+                "n": 326,
+                "accuracy": 0.7392638036809815
+              }
+            },
+            "answer_is_zero": {
+              "False": {
+                "n": 952,
+                "accuracy": 0.7521008403361344
+              },
+              "True": {
+                "n": 72,
+                "accuracy": 0.9166666666666666
+              }
+            }
+          }
+        }
+      }
+    },
+    "shallow_s0": {
+      "run_commit": "a6870104b77e24515b6e9f424f4d1e82e8ab547f",
+      "metrics": {
+        "L4": {
+          "n": 2048,
+          "accuracy": 0.0908203125,
+          "groups": {
+            "tree_height": {
+              "3": {
+                "n": 1384,
+                "accuracy": 0.08670520231213873
+              },
+              "4": {
+                "n": 664,
+                "accuracy": 0.09939759036144578
+              }
+            },
+            "root_operator": {
+              "add": {
+                "n": 677,
+                "accuracy": 0.08124076809453472
+              },
+              "mul": {
+                "n": 669,
+                "accuracy": 0.10762331838565023
+              },
+              "sub": {
+                "n": 702,
+                "accuracy": 0.08404558404558404
+              }
+            },
+            "answer_is_zero": {
+              "False": {
+                "n": 1913,
+                "accuracy": 0.05802404600104548
+              },
+              "True": {
+                "n": 135,
+                "accuracy": 0.5555555555555556
+              }
+            }
+          }
+        },
+        "L2": {
+          "n": 1024,
+          "accuracy": 0.640625,
+          "groups": {
+            "tree_height": {
+              "2": {
+                "n": 1024,
+                "accuracy": 0.640625
+              }
+            },
+            "root_operator": {
+              "add": {
+                "n": 334,
+                "accuracy": 0.7305389221556886
+              },
+              "mul": {
+                "n": 364,
+                "accuracy": 0.5164835164835165
+              },
+              "sub": {
+                "n": 326,
+                "accuracy": 0.6871165644171779
+              }
+            },
+            "answer_is_zero": {
+              "False": {
+                "n": 952,
+                "accuracy": 0.6323529411764706
+              },
+              "True": {
+                "n": 72,
+                "accuracy": 0.75
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "pointwise_item_comparisons": {
+    "L4:loop_s0-shallow_s0": {
+      "difference_pp": 15.576171875,
+      "paired_bootstrap_95ci_pp": [
+        13.670654296875002,
+        17.48046875
+      ]
+    },
+    "L4:loop_s0-deep_s0": {
+      "difference_pp": 15.185546875,
+      "paired_bootstrap_95ci_pp": [
+        13.232421875,
+        17.138671875
+      ]
+    },
+    "L2:loop_s0-shallow_s0": {
+      "difference_pp": 12.3046875,
+      "paired_bootstrap_95ci_pp": [
+        9.375,
+        15.33203125
+      ]
+    },
+    "L2:loop_s0-deep_s0": {
+      "difference_pp": 18.45703125,
+      "paired_bootstrap_95ci_pp": [
+        15.13671875,
+        21.6796875
+      ]
+    }
+  },
+  "note": "Post-hoc validation diagnostics; item intervals are not seed uncertainty, not test results, and not multiplicity-adjusted."
+}
