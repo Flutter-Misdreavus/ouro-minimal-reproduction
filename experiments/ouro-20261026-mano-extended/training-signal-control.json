@@ -1,0 +1,14 @@
+{
+  "run_commit": "97988caeb8ea3e30f6a3c20a2115d849d1c3174b",
+  "status": "PASSED",
+  "purpose": "Positive control for label mapping and gradient flow; not held-out accuracy",
+  "device": "cpu",
+  "precision": "fp32",
+  "width": 32,
+  "layers": 3,
+  "loops": 4,
+  "fixed_examples": 16,
+  "steps": 500,
+  "training_accuracy": 1.0,
+  "last_training_ce": 0.0030579175800085068
+}
