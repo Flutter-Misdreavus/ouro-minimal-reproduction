@@ -1,0 +1,23 @@
+{
+  "run_id": "ouro-20261026-mano-smoke",
+  "run_commit": "961ad2078f46c85a313a8042f59534d37e7cc7b1",
+  "status": "SUCCEEDED",
+  "parameter_count": 2380032,
+  "validation_sha256": "934cb467a29710df7c277358d9186504b5eb02b738ad39cea9264df2aac846f8",
+  "test_sha256": "db8e56ee4167d21453dcf1f2d9b3871c6a211b8e524b9a1ff8960e599d61e2c8",
+  "device": "Tesla V100-SXM2-32GB",
+  "precision": "fp16",
+  "torch": "2.2.2+cu121",
+  "config_sha256": "add7b3bbe1d5df90b77bb1390776a0a635279d47023a69dfd91d92d1d77ba10b",
+  "completed_steps": 40,
+  "nonpad_tokens": 164176,
+  "train_stream_sha256": "0a1e60ea0c1f869f7d3aa3de01383d6fcc9e1f7818dc1eb915110c9c5e367ae5",
+  "skipped_updates": 0,
+  "validation": {
+    "accuracy": 0.09375,
+    "ce": 3.1469550132751465,
+    "n": 64
+  },
+  "elapsed_seconds": 5.181568794883788,
+  "peak_allocated_bytes": 857920000
+}
