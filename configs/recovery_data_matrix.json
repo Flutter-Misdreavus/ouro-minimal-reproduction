@@ -1,0 +1,47 @@
+{
+  "run_id": "ouro-20261026-recovery-data",
+  "output_root": "runtime/recovery-data",
+  "wall_seconds": 7500,
+  "runs": [
+    {
+      "name": "catalan_mixed",
+      "args": [
+        "-m",
+        "ouro_repro.recover_train",
+        "--config",
+        "configs/recovery_catalan_mixed.json"
+      ],
+      "timeout_seconds": 1860
+    },
+    {
+      "name": "catalan_primed",
+      "args": [
+        "-m",
+        "ouro_repro.recover_train",
+        "--config",
+        "configs/recovery_catalan_primed.json"
+      ],
+      "timeout_seconds": 1860
+    },
+    {
+      "name": "uniform_split_mixed",
+      "args": [
+        "-m",
+        "ouro_repro.recover_train",
+        "--config",
+        "configs/recovery_uniform_split_mixed.json"
+      ],
+      "timeout_seconds": 1860
+    },
+    {
+      "name": "uniform_split_primed",
+      "args": [
+        "-m",
+        "ouro_repro.recover_train",
+        "--config",
+        "configs/recovery_uniform_split_primed.json"
+      ],
+      "timeout_seconds": 1860
+    }
+  ]
+}

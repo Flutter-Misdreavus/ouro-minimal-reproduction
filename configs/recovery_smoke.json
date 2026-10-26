@@ -1,0 +1,18 @@
+{
+  "run_id": "ouro-20261026-recovery-smoke",
+  "seed": 0,
+  "layers": 3,
+  "loops": 1,
+  "width": 256,
+  "heads": 4,
+  "precision": "fp32",
+  "lr": 0.002,
+  "steps": 40,
+  "batch_size": 256,
+  "warmup_steps": 10,
+  "atomic_warmup_steps": 20,
+  "tree_distribution": "uniform_split",
+  "validation_size": 64,
+  "eval_every": 20,
+  "wall_seconds": 180
+}

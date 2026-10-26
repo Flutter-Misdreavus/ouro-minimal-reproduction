@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "run_id": "ouro-20261026-recovery-data",
+  "parent_run_id": "ouro-20261026-atomic",
+  "ready": true,
+  "hypothesis": "Task composition difficulty and tree sampling contribute to the earlier learning failure; atomic priming or official-style trees may improve length10 learning.",
+  "baseline": "Fresh3-layer width256, FP32 lr0.002, original Catalan trees, uniform1..10 lengths",
+  "intervention": "2x2 tree sampler(Catalan/uniform split) and first2000steps(one-operation priming/no priming)",
+  "dataset": "Online prefix arithmetic mod23; default historical generator stream regression-tested",
+  "split": "Primary2048 unique uniform-split length10 validation; secondary1024 legacy Catalan validation; exclude both, original10000 Catalan test and new10000 uniform-split test; do not score either test",
+  "primary_metric": "Final-step uniform-split length10 validation accuracy",
+  "decision_rule": "If the fresh baseline reaches20% primary accuracy, its recipe qualifies for an architecture comparison. To promote a changed data recipe, require primary >=20% and >=5pp above that baseline. Among qualifying recipes choose lowest primary validation CE. If no recipe passes, report null effects and inspect predeclared length1/2/4 diagnostics before separately freezing any extension. Never select by reserved test.",
+  "controls": [
+    "identical initial weights",
+    "same model/optimizer/LR/schedule/step and example count",
+    "all four primary/secondary validation hashes identical",
+    "architecture unchanged",
+    "report token-count differences due to curriculum",
+    "FP32; single GPU serial execution"
+  ],
+  "seeds": [
+    0
+  ],
+  "code_revision": "clean HEAD at launch",
+  "environment": "V10032GB existing project environment",
+  "experiment_commands": [
+    "python -m scripts.run_matrix --config configs/recovery_data_matrix.json"
+  ],
+  "budget": {
+    "gpu_count": 1,
+    "gpu_hours": 2.084,
+    "wall_seconds": 7500,
+    "max_attempts": 1,
+    "model_cost_limit": 0
+  },
+  "stop_conditions": [
+    "nonfinite loss or gradient",
+    "OOM",
+    "heldout overlap",
+    "budget exceeded"
+  ],
+  "required_outputs": [
+    "all reports and histories",
+    "per-length exposure counts",
+    "source and split hashes",
+    "review and next-stage decision"
+  ],
+  "version_control": {
+    "repository": "Flutter-Misdreavus/ouro-minimal-reproduction",
+    "visibility": "public",
+    "visibility_authorization": "Existing explicit user authorization",
+    "branch": "main",
+    "push_mode": "direct",
+    "checkpoint_minutes": 15
+  }
+}

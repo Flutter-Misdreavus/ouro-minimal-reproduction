@@ -25,9 +25,12 @@ def evaluate(tokens):
 
 
 class Generator:
-    def __init__(self, seed, max_ops=10):
+    def __init__(self, seed, max_ops=10, tree_distribution='catalan'):
+        if tree_distribution not in ('catalan', 'uniform_split'):
+            raise ValueError('Unknown tree distribution')
         self.rng = random.Random(seed)
         self.max_ops = max_ops
+        self.tree_distribution = tree_distribution
         self.catalan = [math.comb(2 * n, n) // (n + 1) for n in range(max_ops + 1)]
         self.weights = {n: [self.catalan[k] * self.catalan[n - 1 - k]
                            for k in range(n)] for n in range(1, max_ops + 1)}
@@ -36,7 +39,8 @@ class Generator:
         if n == 0:
             value = self.rng.randrange(23)
             return [NUMBER + value], value
-        k = self.rng.choices(range(n), weights=self.weights[n])[0]
+        k = (self.rng.choices(range(n), weights=self.weights[n])[0]
+             if self.tree_distribution == 'catalan' else self.rng.randrange(n))
         left, a = self.tree(k)
         right, b = self.tree(n - k - 1)
         op = self.rng.choice((ADD, SUB, MUL))
@@ -49,8 +53,11 @@ class Generator:
         return [BOS, LENGTH + n] + expression + [ANS], answer
 
 
-def fixed_set(seed, count, max_ops=10, excluded=()):
-    generator = Generator(seed, max_ops)
+def fixed_set(seed, count, max_ops=10, excluded=(), tree_distribution='catalan'):
+    capacity = math.comb(2 * max_ops, max_ops) // (max_ops + 1) * 3 ** max_ops * 23 ** (max_ops + 1)
+    if count > capacity:
+        raise ValueError('Requested more unique expressions than exist')
+    generator = Generator(seed, max_ops, tree_distribution)
     seen = set(excluded)
     result = []
     while len(result) < count:

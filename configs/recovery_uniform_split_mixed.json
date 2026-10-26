@@ -1,0 +1,18 @@
+{
+  "run_id": "ouro-20261026-recovery-uniform_split_mixed",
+  "seed": 0,
+  "layers": 3,
+  "loops": 1,
+  "width": 256,
+  "heads": 4,
+  "precision": "fp32",
+  "lr": 0.002,
+  "steps": 12000,
+  "batch_size": 256,
+  "warmup_steps": 200,
+  "atomic_warmup_steps": 0,
+  "tree_distribution": "uniform_split",
+  "validation_size": 2048,
+  "eval_every": 1000,
+  "wall_seconds": 1800
+}
