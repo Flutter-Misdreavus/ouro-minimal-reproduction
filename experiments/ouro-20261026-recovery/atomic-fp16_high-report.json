@@ -1,0 +1,60 @@
+{
+  "run_id": "ouro-20261026-atomic-fp16_high",
+  "run_commit": "687dd831b961192759d211ab6a10756f42fdf649",
+  "status": "SUCCEEDED",
+  "config": {
+    "run_id": "ouro-20261026-atomic-fp16_high",
+    "seed": 0,
+    "layers": 3,
+    "loops": 1,
+    "width": 256,
+    "heads": 4,
+    "lr": 0.002,
+    "precision": "fp16",
+    "steps": 4000,
+    "batch_size": 256,
+    "warmup_steps": 200,
+    "eval_every": 500,
+    "wall_seconds": 1200
+  },
+  "config_sha256": "af04320e8e44bc996b687d3361f8b4ccec785ff9b5699fda43968e57811e429f",
+  "initial_parameters_sha256": "52f60594ffab29b5da581ee30a1daff21e7b1b9995b82fda778610e527c89136",
+  "splits_sha256": {
+    "train": "acc3fc7398a7636e6ecef669e8a47a4446d80b15fc416d11cf37d7356b4c6e2d",
+    "validation": "47945b4724fce7abdc51281e304ddae48ae98acb2ed538a1a627a4df3eecbc7f",
+    "test": "e6d0cdb9cb59f2d1d4417de5f5a72a8d7f90e029fb07d69522d4fc5a2f58635c"
+  },
+  "split_sizes": {
+    "train": 1269,
+    "validation": 159,
+    "test": 159
+  },
+  "device": "Tesla V100-SXM2-32GB",
+  "parameter_count": 2380032,
+  "test_evaluated": false,
+  "completed_steps": 4000,
+  "train": {
+    "accuracy": 1.0,
+    "ce": 5.952946366960532e-07,
+    "n": 1269,
+    "per_operator": {
+      "add": 1.0,
+      "sub": 1.0,
+      "mul": 1.0
+    }
+  },
+  "validation": {
+    "accuracy": 0.509433925151825,
+    "ce": 7.281980037689209,
+    "n": 159,
+    "per_operator": {
+      "add": 0.7169811725616455,
+      "sub": 0.03773584961891174,
+      "mul": 0.7735849022865295
+    }
+  },
+  "skipped_updates": 0,
+  "sampler_sha256": "fb429ac25ebd769659e197c8e126321181fae153e61ff11ef4ad87bb8a464397",
+  "elapsed_seconds": 52.122325563337654,
+  "peak_allocated_bytes": 131614208
+}
