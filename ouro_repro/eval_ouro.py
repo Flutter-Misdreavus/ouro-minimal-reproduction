@@ -27,7 +27,9 @@ def load_model(loops, dtype=torch.float16):
     model.config.total_ut_steps = loops
     model.model.total_ut_steps = loops
     model.config.use_cache = False
-    model.early_exit_step = None
+    # Upstream exit_at_step is zero-based. Force the final executed depth;
+    # a floating-point CDF threshold of 1 is not an exact static-depth guarantee.
+    model.early_exit_step = loops - 1
     model.early_exit_threshold = 1.0
     model.eval().to('cuda')
     tokenizer = AutoTokenizer.from_pretrained('runtime/model', local_files_only=True)
