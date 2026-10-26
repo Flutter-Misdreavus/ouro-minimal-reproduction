@@ -1,0 +1,79 @@
+{
+  "run_id": "ouro-20261026-recovery-smoke",
+  "run_commit": "99fa32372b31e80de88518e6f2f57039d9e4b760",
+  "status": "SUCCEEDED",
+  "config": {
+    "run_id": "ouro-20261026-recovery-smoke",
+    "seed": 0,
+    "layers": 3,
+    "loops": 1,
+    "width": 256,
+    "heads": 4,
+    "precision": "fp32",
+    "lr": 0.002,
+    "steps": 40,
+    "batch_size": 256,
+    "warmup_steps": 10,
+    "atomic_warmup_steps": 20,
+    "tree_distribution": "uniform_split",
+    "validation_size": 64,
+    "eval_every": 20,
+    "wall_seconds": 180
+  },
+  "config_sha256": "f20d217f81fdf07729b0d82629616f142a077c93f0e33b81d51c7a544f953be3",
+  "initial_parameters_sha256": "52f60594ffab29b5da581ee30a1daff21e7b1b9995b82fda778610e527c89136",
+  "validation_sha256": "7b828cb583f9e5bd2d6a93c401c0522ede92500255543e89912f29c5979907d0",
+  "legacy_validation_sha256": "41ecefb70c0007e186619bd8fa1b3ee9afa19aa50f112bcab20066c65e457969",
+  "reserved_test_sha256": "4513c764d0fc49fd773e2e4d5a07e6a45769988ea2dad225068ec4f33d98c07a",
+  "test_evaluated": false,
+  "heldout_expressions": 21088,
+  "device": "Tesla V100-SXM2-32GB",
+  "parameter_count": 2380032,
+  "precision": "fp32",
+  "torch": "2.2.2+cu121",
+  "diagnostic_note": "Lengths1/2/4 may overlap training; diagnostic fit, not generalization",
+  "completed_steps": 40,
+  "nonpad_tokens": 118334,
+  "train_stream_sha256": "22d05c57de9d1b5bbb67ba08c4f23827938d7bd07fe231b8b76c89713e5ca480",
+  "length_counts": {
+    "1": 5612,
+    "2": 471,
+    "3": 490,
+    "4": 523,
+    "5": 522,
+    "6": 576,
+    "7": 496,
+    "8": 537,
+    "9": 513,
+    "10": 500
+  },
+  "validation": {
+    "accuracy": 0.0625,
+    "ce": 3.154362201690674,
+    "n": 64
+  },
+  "legacy_validation": {
+    "accuracy": 0.056640625,
+    "ce": 3.137927532196045,
+    "n": 1024
+  },
+  "diagnostics": {
+    "1": {
+      "accuracy": 0.06640625,
+      "ce": 3.0799864530563354,
+      "n": 512
+    },
+    "2": {
+      "accuracy": 0.072265625,
+      "ce": 3.1023192405700684,
+      "n": 512
+    },
+    "4": {
+      "accuracy": 0.03125,
+      "ce": 3.1446573734283447,
+      "n": 512
+    }
+  },
+  "elapsed_seconds": 2.34673594776541,
+  "peak_allocated_bytes": 431252992
+}
