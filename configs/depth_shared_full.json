@@ -1,0 +1,15 @@
+{
+  "run_id": "ouro-20261026-shared-depth-full",
+  "output_root": "runtime/shared-depth-formal",
+  "wall_seconds": 28800,
+  "runs": [
+    {
+      "name": "full",
+      "args": [
+        "-m",
+        "ouro_repro.sweep_ouro"
+      ],
+      "timeout_seconds": 28700
+    }
+  ]
+}
