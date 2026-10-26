@@ -1,0 +1,13 @@
+{
+  "catalan": {
+    "expected_height_at_10_ops": 7.071207430340558,
+    "probability_root_has_leaf_child_at_10_ops": 0.5789473684210527,
+    "singleton_stream_sha256": "fe43051974edb65c9a27709d26be00de72c9e9620e9d8b138113a12ca6ffd5f1"
+  },
+  "uniform_split": {
+    "expected_height_at_10_ops": 5.641093474426808,
+    "probability_root_has_leaf_child_at_10_ops": 0.2,
+    "singleton_stream_sha256": "6b1c706be05ffdd7c01f2c254cb0f8f02b365a3cd67a01e9c4b03c317ad54af2"
+  },
+  "note": "Singleton supports are identical, but RNG consumption changes sample order; one seed does not isolate tree shape from sampling noise."
+}
