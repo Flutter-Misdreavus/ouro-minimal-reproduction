@@ -1,0 +1,23 @@
+{
+  "run_id": "ouro-20261026-mano-pilot-loop-lr2",
+  "run_commit": "910b2a8b0be85d1cc6083c3ad644cca007f508c2",
+  "status": "SUCCEEDED",
+  "parameter_count": 2380032,
+  "validation_sha256": "41ecefb70c0007e186619bd8fa1b3ee9afa19aa50f112bcab20066c65e457969",
+  "test_sha256": "4b28df09750b2830b7e65ad9359528e9c39b9e4339988888713725b56d9cf3e9",
+  "device": "Tesla V100-SXM2-32GB",
+  "precision": "fp16",
+  "torch": "2.2.2+cu121",
+  "config_sha256": "23df93ca51fc38e1ec2c5a90190b0547804f9904c6d290e331c7a8c56052ad84",
+  "completed_steps": 2000,
+  "nonpad_tokens": 8195132,
+  "train_stream_sha256": "308ea32dbe099425114d7b2d0294b2b45e15a7a33e613ff87b9339c50e3927be",
+  "skipped_updates": 0,
+  "validation": {
+    "accuracy": 0.06640625,
+    "ce": 3.083089053630829,
+    "n": 1024
+  },
+  "elapsed_seconds": 109.38964636716992,
+  "peak_allocated_bytes": 856478208
+}

@@ -1,0 +1,20 @@
+{
+  "run_id": "ouro-20261026-mano-extended-shallow-s0-r2",
+  "layers": 3,
+  "loops": 1,
+  "width": 256,
+  "heads": 4,
+  "max_ops": 10,
+  "seed": 0,
+  "lr": 0.0002,
+  "steps": 20000,
+  "batch_size": 256,
+  "warmup_steps": 1000,
+  "validation_size": 1024,
+  "test_size": 10000,
+  "eval_every": 1000,
+  "wall_seconds": 3600,
+  "precision": "fp16",
+  "evaluate_test": false,
+  "require_cuda": true
+}

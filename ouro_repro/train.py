@@ -16,8 +16,8 @@ from .model import Model
 
 
 def revision():
-    if subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no']).strip():
-        raise RuntimeError('Commit tracked changes before running')
+    if subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=all']).strip():
+        raise RuntimeError('Commit all experiment source/configuration files before running')
     return subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
 
 

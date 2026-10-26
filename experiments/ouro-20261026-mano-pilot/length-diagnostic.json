@@ -1,0 +1,42 @@
+{
+  "run_id": "ouro-20261026-mano-pilot-loop-lr5",
+  "checkpoint_step": 2000,
+  "diagnostic_commit": "dc9ba50b4a58f5f7a1c2d15e967723c5d3a20348",
+  "note": "Short-length diagnostics can overlap training; not a generalization claim",
+  "lengths": {
+    "1": {
+      "accuracy": 0.0576171875,
+      "always_zero_accuracy": 0.044921875,
+      "prediction_counts": {
+        "3": 330,
+        "0": 694
+      }
+    },
+    "2": {
+      "accuracy": 0.0546875,
+      "always_zero_accuracy": 0.044921875,
+      "prediction_counts": {
+        "0": 681,
+        "3": 343
+      }
+    },
+    "4": {
+      "accuracy": 0.06640625,
+      "always_zero_accuracy": 0.064453125,
+      "prediction_counts": {
+        "3": 337,
+        "0": 683,
+        "16": 4
+      }
+    },
+    "10": {
+      "accuracy": 0.0595703125,
+      "always_zero_accuracy": 0.0654296875,
+      "prediction_counts": {
+        "0": 631,
+        "3": 350,
+        "16": 43
+      }
+    }
+  }
+}
