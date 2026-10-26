@@ -1,0 +1,32 @@
+{
+  "run_commits": {
+    "shallow_s0": "53fddb301c96a870a008fd034c5671ec7f819911",
+    "loop_s0": "27635750e1750b5b53b68492857c91d43c2a8f69",
+    "deep_s0": "2ddb73ddcbc83be0c43b7c07764cedd20b41f156"
+  },
+  "identical_core_source": {
+    "ouro_repro/train.py": "0980f89a481eb400fd5f2639e71711280d991653f1a57b5b8fba7af276c7d66c",
+    "ouro_repro/model.py": "52581c7c87f0482919a067ace17a5ce5462fcbafbdcfb29329f54263cd884171",
+    "ouro_repro/mano.py": "109aa311a9ae261f13e541b0e84edcec906ee94cfe41cb385fddfd1eb886fe0d"
+  },
+  "same_reserved_splits": {
+    "validation_sha256": "41ecefb70c0007e186619bd8fa1b3ee9afa19aa50f112bcab20066c65e457969",
+    "test_sha256": "4b28df09750b2830b7e65ad9359528e9c39b9e4339988888713725b56d9cf3e9"
+  },
+  "configuration_sha256_verified": {
+    "shallow_s0": "ddbd09a4240e98593df2a1a1c82c45f2383979a48785fa9eac310ed238ad9639",
+    "loop_s0": "db9261c6c894b8f6a401974d751f46c61ad4975513ed230bdc4baef85c285d13",
+    "deep_s0": "1f8471dd9070adbd7660c0e2ec8c1ab336a0f86d72ee49a923b6e0a380ed5ea9"
+  },
+  "all_runs_succeeded": true,
+  "same_training_stream_sha256": "b29db876ae3394af1aa9396e7864887f596218ba39fd980ef20e2611ee00ae91",
+  "steps_each": 20000,
+  "nonpad_tokens_each": 81929878,
+  "test_set_evaluated": false,
+  "report_generation_commit": "3014ec41ff6bfb085fdf48b4c672b540f59ab498",
+  "checkpoint_sha256": {
+    "shallow": "caabd4c944a83429fe557faf8342b34b0a2350f21344409217fd570bf0c455cc",
+    "loop": "0abb63d4fba431ae25b81ce1c7b135f2fb7062f54b7b6cc6b036556f048c1db3",
+    "deep": "2e4752d3b9a03d16e9b64446816ff75309ec809b65015a404643e902d9327848"
+  }
+}

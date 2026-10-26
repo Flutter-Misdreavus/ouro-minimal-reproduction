@@ -1,0 +1,50 @@
+{
+  "run_id": "ouro-20261026-mano-extended-deep-s0-r2",
+  "checkpoint_step": 20000,
+  "diagnostic_commit": "1aaa836eb15cd746982d21bd5a8bbcd211201ec4",
+  "note": "Short-length diagnostics can overlap training; not a generalization claim",
+  "lengths": {
+    "1": {
+      "accuracy": 0.0595703125,
+      "always_zero_accuracy": 0.044921875,
+      "prediction_counts": {
+        "11": 330,
+        "0": 644,
+        "1": 50
+      }
+    },
+    "2": {
+      "accuracy": 0.05078125,
+      "always_zero_accuracy": 0.044921875,
+      "prediction_counts": {
+        "16": 95,
+        "0": 735,
+        "1": 163,
+        "11": 31
+      }
+    },
+    "4": {
+      "accuracy": 0.0693359375,
+      "always_zero_accuracy": 0.064453125,
+      "prediction_counts": {
+        "0": 731,
+        "11": 55,
+        "1": 179,
+        "21": 39,
+        "16": 18,
+        "7": 2
+      }
+    },
+    "10": {
+      "accuracy": 0.0732421875,
+      "always_zero_accuracy": 0.0654296875,
+      "prediction_counts": {
+        "0": 794,
+        "1": 124,
+        "21": 64,
+        "11": 41,
+        "16": 1
+      }
+    }
+  }
+}

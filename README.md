@@ -15,8 +15,19 @@ not established by the paired intervals.
 See the [review and full table](experiments/ouro-20261026-depth-full/review.md),
 [curves](experiments/ouro-20261026-depth-full/depth-curves.png), and
 [paired intervals](experiments/ouro-20261026-depth-full/paired-comparisons.json).
-The small-model training comparison is still in progress; its pilot did not
-establish learning on the hardest expressions.
+The small-model comparison completed all three 20,000-step runs. Final length-10
+validation accuracies are **7.13%** (3 layers x 1 loop), **6.74%** (3 x 4), and
+**7.62%** (12 x 1), versus an always-zero baseline of **6.54%**. Each consumed
+the same 81.93 million nonpadding tokens. Basic arithmetic learning remained
+inadequate, so this attempt **does not establish a training-time loop advantage**.
+It is an exploratory single-seed result; additional seeds were not launched,
+and the reserved synthetic test set was not scored.
+
+See the [training review](experiments/ouro-20261026-mano-extended/review.md),
+[learning curves](experiments/ouro-20261026-mano-extended/training-curves.png),
+and [source/configuration audit](experiments/ouro-20261026-mano-extended/provenance-audit.json).
+The full released-weight sweep took about 55 minutes; the three accepted training
+extensions took about 40.5 minutes, excluding pilots, setup, and diagnostics.
 
 ## Scope
 
@@ -82,6 +93,14 @@ not per-depth latency. For the extended single-seed training comparison, run the
 three `configs/mano_extended_{shallow,loop,deep}_s0.json` configurations with
 `python -m ouro_repro.train --config ... --output ...` in separate new output
 directories. Run GPU workloads sequentially. A clean Git working tree is required.
+
+After training, create the curves with:
+
+```bash
+python scripts/report_results.py --training-directory runtime/mano-extended-r2 --output runtime/training-analysis
+```
+
+Use the root containing `shallow_s0`, `loop_s0`, and `deep_s0` for that argument.
 
 Commit code/configuration before experiment commands. Output directories must
 not already exist. Full ARC uses its 1,172-item test split; full Winogrande uses
