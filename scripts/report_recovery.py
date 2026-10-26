@@ -58,7 +58,7 @@ for stage, source in [('atomic', args.atomic_directory), ('data', args.data_dire
     summary[stage] = records
     (out / (stage + '-summary.json')).write_text(json.dumps(records, indent=2) + '\n')
     with (out / (stage + '-summary.csv')).open('w') as f:
-        writer = csv.writer(f)
+        writer = csv.writer(f, lineterminator='\n')
         writer.writerow(['arm', 'run_commit', 'seed', 'validation_accuracy', 'validation_ce', 'seconds'])
         for name, r in records.items():
             writer.writerow([name, r['run_commit'], r['config']['seed'], r['validation']['accuracy'],
