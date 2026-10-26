@@ -1,0 +1,20 @@
+{
+  "run_id": "ouro-20261026-mano-pilot-deep-lr2",
+  "layers": 12,
+  "loops": 1,
+  "width": 256,
+  "heads": 4,
+  "max_ops": 10,
+  "seed": 0,
+  "lr": 0.0002,
+  "steps": 2000,
+  "batch_size": 256,
+  "warmup_steps": 100,
+  "validation_size": 1024,
+  "test_size": 10000,
+  "eval_every": 500,
+  "wall_seconds": 1800,
+  "precision": "fp16",
+  "evaluate_test": false,
+  "require_cuda": true
+}

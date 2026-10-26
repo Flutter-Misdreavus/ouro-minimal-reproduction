@@ -1,0 +1,20 @@
+{
+  "run_id": "ouro-20261026-mano-smoke",
+  "layers": 3,
+  "loops": 4,
+  "width": 256,
+  "heads": 4,
+  "max_ops": 10,
+  "seed": 0,
+  "lr": 0.0005,
+  "steps": 40,
+  "batch_size": 256,
+  "warmup_steps": 10,
+  "validation_size": 64,
+  "test_size": 64,
+  "eval_every": 20,
+  "wall_seconds": 300,
+  "precision": "fp16",
+  "evaluate_test": false,
+  "require_cuda": true
+}
