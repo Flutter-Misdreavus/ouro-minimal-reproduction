@@ -80,6 +80,7 @@ if args.training_directory:
     axes[0].set(xlabel='Training steps', ylabel='Length-10 validation accuracy (%)')
     axes[1].set(xlabel='Training steps', ylabel='Length-10 validation cross entropy')
     for axis in axes:
+        axis.set_xticks([0, 5000, 10000, 15000, 20000])
         axis.grid(alpha=0.25)
         axis.legend(fontsize=8)
     fig.suptitle('Exploratory single-seed scaled Mano reproduction')
@@ -89,5 +90,7 @@ if args.training_directory:
     plt.close(fig)
     summary['training'] = training
 
+for path in out.glob('*.svg'):
+    path.write_text('\n'.join(line.rstrip() for line in path.read_text().splitlines()) + '\n')
 (out / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
 print(json.dumps({'output': str(out), 'sections': list(summary)}))
