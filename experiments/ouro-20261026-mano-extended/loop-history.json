@@ -1,0 +1,271 @@
+[
+  {
+    "step": 0,
+    "validation": {
+      "accuracy": 0.00390625,
+      "ce": 3.748810052871704,
+      "n": 1024
+    },
+    "seconds": 0.5477724210359156
+  },
+  {
+    "step": 1000,
+    "train_ce": 3.1428704261779785,
+    "gradient_norm": 1.0319105386734009,
+    "validation": {
+      "accuracy": 0.060546875,
+      "ce": 3.099849045276642,
+      "n": 1024
+    },
+    "seconds": 47.39025762910023,
+    "nonpad_tokens": 4097588,
+    "skipped_updates": 0
+  },
+  {
+    "step": 2000,
+    "train_ce": 3.128814220428467,
+    "gradient_norm": 1.0670377016067505,
+    "validation": {
+      "accuracy": 0.0732421875,
+      "ce": 3.0894827246665955,
+      "n": 1024
+    },
+    "seconds": 92.0363188139163,
+    "nonpad_tokens": 8195132,
+    "skipped_updates": 0
+  },
+  {
+    "step": 3000,
+    "train_ce": 3.1025829315185547,
+    "gradient_norm": 0.958168625831604,
+    "validation": {
+      "accuracy": 0.0537109375,
+      "ce": 3.0871554017066956,
+      "n": 1024
+    },
+    "seconds": 138.29698514193296,
+    "nonpad_tokens": 12292856,
+    "skipped_updates": 0
+  },
+  {
+    "step": 4000,
+    "train_ce": 3.0531716346740723,
+    "gradient_norm": 1.0823719501495361,
+    "validation": {
+      "accuracy": 0.052734375,
+      "ce": 3.0867353677749634,
+      "n": 1024
+    },
+    "seconds": 183.60983593109995,
+    "nonpad_tokens": 16393346,
+    "skipped_updates": 0
+  },
+  {
+    "step": 5000,
+    "train_ce": 3.079533100128174,
+    "gradient_norm": 1.108993649482727,
+    "validation": {
+      "accuracy": 0.0712890625,
+      "ce": 3.0883275270462036,
+      "n": 1024
+    },
+    "seconds": 229.71748764486983,
+    "nonpad_tokens": 20489572,
+    "skipped_updates": 1
+  },
+  {
+    "step": 6000,
+    "train_ce": 3.1086227893829346,
+    "gradient_norm": 0.8440058827400208,
+    "validation": {
+      "accuracy": 0.0693359375,
+      "ce": 3.08642315864563,
+      "n": 1024
+    },
+    "seconds": 275.3251267038286,
+    "nonpad_tokens": 24585200,
+    "skipped_updates": 1
+  },
+  {
+    "step": 7000,
+    "train_ce": 3.098346471786499,
+    "gradient_norm": 0.7974657416343689,
+    "validation": {
+      "accuracy": 0.06640625,
+      "ce": 3.0813251733779907,
+      "n": 1024
+    },
+    "seconds": 320.6058932230808,
+    "nonpad_tokens": 28679092,
+    "skipped_updates": 2
+  },
+  {
+    "step": 8000,
+    "train_ce": 3.0418732166290283,
+    "gradient_norm": 0.8705364465713501,
+    "validation": {
+      "accuracy": 0.0830078125,
+      "ce": 3.081228017807007,
+      "n": 1024
+    },
+    "seconds": 365.50897974986583,
+    "nonpad_tokens": 32774580,
+    "skipped_updates": 2
+  },
+  {
+    "step": 9000,
+    "train_ce": 3.0557384490966797,
+    "gradient_norm": 1.0010371208190918,
+    "validation": {
+      "accuracy": 0.0712890625,
+      "ce": 3.081488013267517,
+      "n": 1024
+    },
+    "seconds": 412.0315701630898,
+    "nonpad_tokens": 36868718,
+    "skipped_updates": 3
+  },
+  {
+    "step": 10000,
+    "train_ce": 3.0739054679870605,
+    "gradient_norm": 0.8232653141021729,
+    "validation": {
+      "accuracy": 0.068359375,
+      "ce": 3.0887193083763123,
+      "n": 1024
+    },
+    "seconds": 458.3498276998289,
+    "nonpad_tokens": 40963814,
+    "skipped_updates": 3
+  },
+  {
+    "step": 11000,
+    "train_ce": 3.1313376426696777,
+    "gradient_norm": 0.7309529781341553,
+    "validation": {
+      "accuracy": 0.0703125,
+      "ce": 3.0818389654159546,
+      "n": 1024
+    },
+    "seconds": 503.5578364157118,
+    "nonpad_tokens": 45058336,
+    "skipped_updates": 4
+  },
+  {
+    "step": 12000,
+    "train_ce": 3.0564773082733154,
+    "gradient_norm": 0.6253747344017029,
+    "validation": {
+      "accuracy": 0.07421875,
+      "ce": 3.0807358622550964,
+      "n": 1024
+    },
+    "seconds": 548.7654045810923,
+    "nonpad_tokens": 49155494,
+    "skipped_updates": 4
+  },
+  {
+    "step": 13000,
+    "train_ce": 3.0653727054595947,
+    "gradient_norm": 0.6977154612541199,
+    "validation": {
+      "accuracy": 0.0615234375,
+      "ce": 3.0812485218048096,
+      "n": 1024
+    },
+    "seconds": 593.6899123578332,
+    "nonpad_tokens": 53253098,
+    "skipped_updates": 5
+  },
+  {
+    "step": 14000,
+    "train_ce": 3.0870566368103027,
+    "gradient_norm": 0.811458945274353,
+    "validation": {
+      "accuracy": 0.0869140625,
+      "ce": 3.0816964507102966,
+      "n": 1024
+    },
+    "seconds": 638.9270942178555,
+    "nonpad_tokens": 57353152,
+    "skipped_updates": 5
+  },
+  {
+    "step": 15000,
+    "train_ce": 3.0977556705474854,
+    "gradient_norm": 0.8344012498855591,
+    "validation": {
+      "accuracy": 0.0654296875,
+      "ce": 3.079344391822815,
+      "n": 1024
+    },
+    "seconds": 684.1854726499878,
+    "nonpad_tokens": 61446244,
+    "skipped_updates": 6
+  },
+  {
+    "step": 16000,
+    "train_ce": 3.0945584774017334,
+    "gradient_norm": 0.8852837681770325,
+    "validation": {
+      "accuracy": 0.068359375,
+      "ce": 3.0818437933921814,
+      "n": 1024
+    },
+    "seconds": 729.8121094061062,
+    "nonpad_tokens": 65546758,
+    "skipped_updates": 6
+  },
+  {
+    "step": 17000,
+    "train_ce": 3.0427169799804688,
+    "gradient_norm": 0.8414345383644104,
+    "validation": {
+      "accuracy": 0.072265625,
+      "ce": 3.0781124234199524,
+      "n": 1024
+    },
+    "seconds": 773.5794752757065,
+    "nonpad_tokens": 69643040,
+    "skipped_updates": 7
+  },
+  {
+    "step": 18000,
+    "train_ce": 3.0968925952911377,
+    "gradient_norm": 0.7206953763961792,
+    "validation": {
+      "accuracy": 0.0703125,
+      "ce": 3.0794747471809387,
+      "n": 1024
+    },
+    "seconds": 820.7281215088442,
+    "nonpad_tokens": 73736992,
+    "skipped_updates": 7
+  },
+  {
+    "step": 19000,
+    "train_ce": 3.0743610858917236,
+    "gradient_norm": 0.9081036448478699,
+    "validation": {
+      "accuracy": 0.08203125,
+      "ce": 3.080735981464386,
+      "n": 1024
+    },
+    "seconds": 867.2174210809171,
+    "nonpad_tokens": 77833782,
+    "skipped_updates": 9
+  },
+  {
+    "step": 20000,
+    "train_ce": 3.0817670822143555,
+    "gradient_norm": 1.0222396850585938,
+    "validation": {
+      "accuracy": 0.0673828125,
+      "ce": 3.0792324542999268,
+      "n": 1024
+    },
+    "seconds": 912.6791282687336,
+    "nonpad_tokens": 81929878,
+    "skipped_updates": 10
+  }
+]

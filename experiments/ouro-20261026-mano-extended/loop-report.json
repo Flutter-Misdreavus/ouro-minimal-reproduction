@@ -1,0 +1,23 @@
+{
+  "run_id": "ouro-20261026-mano-extended-loop-s0-r2",
+  "run_commit": "27635750e1750b5b53b68492857c91d43c2a8f69",
+  "status": "SUCCEEDED",
+  "parameter_count": 2380032,
+  "validation_sha256": "41ecefb70c0007e186619bd8fa1b3ee9afa19aa50f112bcab20066c65e457969",
+  "test_sha256": "4b28df09750b2830b7e65ad9359528e9c39b9e4339988888713725b56d9cf3e9",
+  "device": "Tesla V100-SXM2-32GB",
+  "precision": "fp16",
+  "torch": "2.2.2+cu121",
+  "config_sha256": "db9261c6c894b8f6a401974d751f46c61ad4975513ed230bdc4baef85c285d13",
+  "completed_steps": 20000,
+  "nonpad_tokens": 81929878,
+  "train_stream_sha256": "b29db876ae3394af1aa9396e7864887f596218ba39fd980ef20e2611ee00ae91",
+  "skipped_updates": 10,
+  "validation": {
+    "accuracy": 0.0673828125,
+    "ce": 3.0792324542999268,
+    "n": 1024
+  },
+  "elapsed_seconds": 912.9035477130674,
+  "peak_allocated_bytes": 856478208
+}
