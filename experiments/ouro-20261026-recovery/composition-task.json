@@ -6,7 +6,7 @@
   "hypothesis": "A reduced-difficulty progressive curriculum can establish compositional learning, allowing an interpretable loop-vs-shallow/deep comparison at local scale.",
   "baseline": "3-layer single-loop width256 model",
   "intervention": "3 layers x4 loops (same parameters),12 layers x1 loop (same expanded depth)",
-  "dataset": "Uniform-split prefix arithmetic mod23; target maximum4 operations; frozen curriculum1-only then1..2 then1..4",
+  "dataset": "Uniform-split prefix arithmetic mod23; maximum4 operators. Steps1-4000 L1,4001-10000 lengths1..2,10001-20000 lengths1..4. All arms share the same online samples.",
   "split": "2048 unique heldout L4 primary validation,1024 heldout L2 secondary,1024 heldout L4 diagnostic; exclude all from training; keep10000 L4 test and original L10 test unscored. L1 diagnostic may be seen.",
   "primary_metric": "Final-step heldout L4 validation accuracy; L2 validation and L1 fit diagnose learning",
   "decision_rule": "Learning gate: at least one arm >=50% primary accuracy. Confirm additional seeds1/2 for all arms only if loop >=50% and loop-shallow >=10pp at seed0. Otherwise report exploratory result and stop this bounded stage without a superiority claim. Effective-depth comparisons always report both loop and deep, not just favorable baseline.",
@@ -52,5 +52,7 @@
     "branch": "main",
     "push_mode": "direct",
     "checkpoint_minutes": 15
-  }
+  },
+  "task_revision": 2,
+  "amendment_before_formal_launch": "Full L1 support online was not reliably fitted by2000-step priming (unlike the smaller1269-item atomic training partition). Extend common atomic phase to4000, then1..2 through10000, then1..4 through20000; total steps remain matched. No formal composition run had started."
 }

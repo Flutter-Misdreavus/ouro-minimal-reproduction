@@ -20,8 +20,10 @@ sampling nor a one-time atomic primer is sufficient to restore L10 learning.
 These are single-seed exploratory null effects, not a proof that either change
 can never help. Short-length diagnostics in this stage can overlap training.
 
-Priming produces high L1 fit initially in both distributions, but the
-uniform-split arm subsequently loses much of it. Both primed arms reach about
+Priming produces high L1 fit in the Catalan arm, but the uniform-split arm
+remains near 40%. Changing the sampler also changes RNG consumption and thus
+the order of atomic examples, even when tree shape cannot differ at L1. These
+single-seed arm differences cannot be attributed solely to tree shape. Both primed arms reach about
 21% on L2 diagnostics, versus 8% without priming. Basic knowledge acquisition
 and compositional generalization are therefore distinct bottlenecks; prior
 claims that a larger learning rate alone would fix the problem are unsupported.
@@ -36,8 +38,8 @@ It is a mechanism test at reduced difficulty, not a replication of Figure 6's
 L10/L16/L24 scores. Compare all three architectures with identical streams,
 steps, hyperparameters and curriculum. Do not tune on either reserved test.
 
-Curriculum: steps 1-2000 use L1 only; steps 2001-8000 use lengths 1..2 uniformly;
-steps 8001-20000 use lengths 1..4 uniformly. The shallow/loop/deep architectures
+Curriculum: steps 1-4000 use L1 only; steps 4001-10000 use lengths 1..2 uniformly;
+steps 10001-20000 use lengths 1..4 uniformly. The shallow/loop/deep architectures
 remain 3x1, 3x4, 12x1 at width 256. FP32/lr 0.002 are fixed from the atomic diagnostic.
 Promote to additional seeds only after a large, usable learning signal appears.
 The detailed decision rule is in composition-task.json.
@@ -48,3 +50,8 @@ The detailed decision rule is in composition-task.json.
 - uniform_split_mixed: `1a811f89b2d9bd66a8d0f7b9aef87baa2c1eb67b`
 - uniform_split_primed: `7bb77952958b592e2df8570a06ef6a7dafae4224`
 - catalan_primed: `4b57e189c93b7c5e1a6c247abbf0708ffc27f621`
+
+Before formal L4 launch, task revision 2 doubles atomic exposure because the
+full-support online task did not reliably fit within 2000 steps. This differs
+from the 1269-item finite atomic training partition. No formal L4 results were
+observed before this amendment; total steps remain 20000 for all architectures.

@@ -1,0 +1,81 @@
+{
+  "run_id": "ouro-20261026-composition-smoke",
+  "run_commit": "ff2bf566b61587e489f98de7689a946e515e90a2",
+  "status": "SUCCEEDED",
+  "config": {
+    "run_id": "ouro-20261026-composition-smoke",
+    "seed": 0,
+    "layers": 12,
+    "loops": 1,
+    "width": 256,
+    "heads": 4,
+    "precision": "fp32",
+    "lr": 0.002,
+    "steps": 60,
+    "batch_size": 256,
+    "warmup_steps": 10,
+    "atomic_warmup_steps": 20,
+    "two_operation_warmup_steps": 40,
+    "task_max_ops": 4,
+    "tree_distribution": "uniform_split",
+    "holdout_composition_diagnostics": true,
+    "validation_size": 64,
+    "eval_every": 20,
+    "wall_seconds": 180
+  },
+  "config_sha256": "de4da1a596cdb0e87d8e97670397a1bbd4009bc83b4b423b95a1e9366568f78b",
+  "initial_parameters_sha256": "5f9703f3471c56d185594037a85031fbf825ae501f52c4ef2ffc0fef6ca8451b",
+  "validation_sha256": "d794aa20a9bf1eedf32bb00ef576643ed2d44aac3bd067b020e14d3aa1dc7fa4",
+  "legacy_validation_sha256": "41ecefb70c0007e186619bd8fa1b3ee9afa19aa50f112bcab20066c65e457969",
+  "reserved_test_sha256": "6beb4891d3aef28e87d798f6d47e530a01b778e52bfba8b1fe1293063a0517f9",
+  "test_evaluated": false,
+  "heldout_expressions": 23136,
+  "device": "Tesla V100-SXM2-32GB",
+  "parameter_count": 9487872,
+  "precision": "fp32",
+  "torch": "2.2.2+cu121",
+  "diagnostic_note": "Length1 may overlap training; lengths2/4 explicitly excluded",
+  "diagnostic_sha256": {
+    "1": "2a7486ebdc41749c0ef44e6b271b3117267d6df51afd23b0ad85e778cd39fc5d",
+    "2": "a61468daad1c5bb8567df5fc4f9f3f9bedb46f18e9f92d1dd5c911bc2c2c0c92",
+    "4": "73548d6dd5665a885c7e84ae5c29391a732bdf4d375469bfe459f4fd58d6cd39"
+  },
+  "completed_steps": 60,
+  "nonpad_tokens": 127618,
+  "train_stream_sha256": "be3071db68f398f64877f6823debda6c732d4135dbc3834b472d4649748e5761",
+  "length_counts": {
+    "1": 9073,
+    "2": 3772,
+    "3": 1268,
+    "4": 1247
+  },
+  "validation": {
+    "accuracy": 0.03125,
+    "ce": 3.144482374191284,
+    "n": 64
+  },
+  "legacy_validation": {
+    "accuracy": 0.0654296875,
+    "ce": 3.1411848068237305,
+    "n": 1024
+  },
+  "diagnostics": {
+    "1": {
+      "accuracy": 0.078125,
+      "ce": 3.104029417037964,
+      "n": 512
+    },
+    "2": {
+      "accuracy": 0.080078125,
+      "ce": 3.1093624234199524,
+      "n": 1024
+    },
+    "4": {
+      "accuracy": 0.0654296875,
+      "ce": 3.115460753440857,
+      "n": 1024
+    }
+  },
+  "elapsed_seconds": 5.122881342191249,
+  "peak_allocated_bytes": 1070736384
+}
