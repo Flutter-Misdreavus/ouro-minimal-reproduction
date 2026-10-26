@@ -1,0 +1,27 @@
+{
+  "run_id": "ouro-20261026-mano-extended-r2",
+  "output_root": "runtime/mano-extended-r2",
+  "wall_seconds": 7320,
+  "runs": [
+    {
+      "name": "loop_s0",
+      "args": [
+        "-m",
+        "ouro_repro.train",
+        "--config",
+        "configs/mano_extended_loop_s0.json"
+      ],
+      "timeout_seconds": 3660
+    },
+    {
+      "name": "deep_s0",
+      "args": [
+        "-m",
+        "ouro_repro.train",
+        "--config",
+        "configs/mano_extended_deep_s0.json"
+      ],
+      "timeout_seconds": 3660
+    }
+  ]
+}
