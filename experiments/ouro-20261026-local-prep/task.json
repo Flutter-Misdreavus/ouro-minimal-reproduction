@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "run_id": "ouro-20261026-local-prep",
+  "parent_run_id": null,
+  "ready": true,
+  "hypothesis": "The local device and pinned software can support faithful fixed-depth Ouro scoring and controlled small-model training.",
+  "baseline": "Published Ouro-1.4B reference results and a 3-layer single-loop synthetic baseline",
+  "intervention": "Environment setup and correctness/pilot checks only; later stages receive separate frozen configurations",
+  "dataset": "Pinned ARC/Winogrande revisions and versioned synthetic prefix arithmetic generator, frozen before use",
+  "split": "Separate calibration/validation and held-out test; no model selection on test",
+  "primary_metric": "Correct forward, loss, gradient, cache, and scorer checks",
+  "decision_rule": "Advance only after numerical correctness and measured resource checks pass",
+  "controls": ["one local GPU", "no unrelated workloads terminated", "no private workspace material published"],
+  "seeds": [0, 1, 2],
+  "code_revision": "Record git HEAD at process start; require clean tracked files",
+  "environment": "Local NVIDIA V100 32GB; isolated project environment; no native BF16",
+  "experiment_commands": ["Commands will be committed with each runnable stage"],
+  "budget": {"gpu_count": 1, "gpu_hours": 2, "wall_seconds": 7200, "max_attempts": 2, "model_cost_limit": 0},
+  "stop_conditions": ["NaN or Inf", "OOM", "data leakage", "budget exceeded", "correctness check failure"],
+  "required_outputs": ["sanitized environment metadata", "pilot metrics", "run commit", "review"],
+  "version_control": {
+    "repository": "Flutter-Misdreavus/ouro-minimal-reproduction",
+    "visibility": "public",
+    "visibility_authorization": "Explicit user request for this experiment overrides the workspace private default",
+    "branch": "main",
+    "push_mode": "direct",
+    "checkpoint_minutes": 15
+  }
+}
