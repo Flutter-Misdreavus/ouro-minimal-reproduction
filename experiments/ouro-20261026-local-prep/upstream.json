@@ -1,0 +1,9 @@
+{
+  "model": "ByteDance/Ouro-1.4B",
+  "revision": "574fa66cb8bf5abdc979642d01cf2b79b16bfab1",
+  "license": "apache-2.0",
+  "dataset_revisions": {
+    "allenai/ai2_arc": "210d026faf9955653af8916fad021475a3f00453",
+    "allenai/winogrande": "01e74176c63542e6b0bcb004dcdea22d94fb67b5"
+  }
+}

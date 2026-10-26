@@ -1,0 +1,151 @@
+{
+  "run_id": "ouro-20261026-depth-sweep",
+  "output_root": "runtime/depth-sweep",
+  "wall_seconds": 28800,
+  "runs": [
+    {
+      "name": "arc_challenge_r4",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "4",
+        "--task",
+        "arc_challenge"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "arc_challenge_r1",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "1",
+        "--task",
+        "arc_challenge"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "arc_challenge_r2",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "2",
+        "--task",
+        "arc_challenge"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "arc_challenge_r3",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "3",
+        "--task",
+        "arc_challenge"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "arc_challenge_r6",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "6",
+        "--task",
+        "arc_challenge"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "arc_challenge_r8",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "8",
+        "--task",
+        "arc_challenge"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "winogrande_r4",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "4",
+        "--task",
+        "winogrande"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "winogrande_r1",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "1",
+        "--task",
+        "winogrande"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "winogrande_r2",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "2",
+        "--task",
+        "winogrande"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "winogrande_r3",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "3",
+        "--task",
+        "winogrande"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "winogrande_r6",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "6",
+        "--task",
+        "winogrande"
+      ],
+      "timeout_seconds": 7200
+    },
+    {
+      "name": "winogrande_r8",
+      "args": [
+        "-m",
+        "ouro_repro.eval_ouro",
+        "--loops",
+        "8",
+        "--task",
+        "winogrande"
+      ],
+      "timeout_seconds": 7200
+    }
+  ]
+}

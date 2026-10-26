@@ -1,0 +1,14 @@
+{
+  "paper_version": "2510.25741v6",
+  "paper_sha256": "784c584aceddddade17dd0cb1058870a6deee0a800d4ea410c8846aa27325f53",
+  "model_weights": {
+    "rfilename": "model.safetensors",
+    "blobId": "0abac80caa3d9f43d031f34086a238fa31019b3e",
+    "size": 2869336434,
+    "lfs": {
+      "sha256": "58872a72616c736595b8b7662079c5b12c5a162ec16eae94f21c348dfa9885af",
+      "size": 2869336434,
+      "pointerSize": 135
+    }
+  }
+}
