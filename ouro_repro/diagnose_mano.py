@@ -7,11 +7,13 @@ from pathlib import Path
 import torch
 from .mano import Generator, batch_tensor, fixed_set, NUMBER
 from .model import Model
+from .train import revision
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--checkpoint', required=True)
 parser.add_argument('--output', required=True)
 args = parser.parse_args()
+commit = revision()
 torch.set_num_threads(4)
 checkpoint = torch.load(args.checkpoint, map_location='cpu', weights_only=False)
 cfg = checkpoint['config']
@@ -19,6 +21,7 @@ model = Model(layers=cfg['layers'], loops=cfg['loops'], width=cfg['width'],
               heads=cfg['heads'], vocab=30 + cfg['max_ops']).eval()
 model.load_state_dict(checkpoint['model'])
 report = {'run_id': cfg['run_id'], 'checkpoint_step': checkpoint['step'],
+          'diagnostic_commit': commit,
           'note': 'Short-length diagnostics can overlap training; not a generalization claim', 'lengths': {}}
 for length in (1, 2, 4, 10):
     gen = Generator(1729, 10)

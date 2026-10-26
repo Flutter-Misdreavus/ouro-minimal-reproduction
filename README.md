@@ -34,4 +34,53 @@ loops before switching to 4, so depths above 4 are not claimed to be wholly unse
 - Released model: https://huggingface.co/ByteDance/Ouro-1.4B
 - Evaluation: https://github.com/EleutherAI/lm-evaluation-harness
 
-Implementation and measured results will be added as each stage completes.
+## Reproduce locally
+
+Use an isolated Python 3.10 environment with CUDA-enabled PyTorch 2.2.2 and
+install `requirements.txt`. The local attempt uses a V100 32GB, FP16 inference,
+FP16 training with gradient scaling, and FP32 softmax for likelihood scoring.
+BF16 is not native on this GPU. Source, model weights, and parquet data are
+downloaded into ignored `runtime/` storage. Downloaded weights are checked
+against upstream SHA256; small files are checked against upstream Git blob IDs.
+
+```bash
+python scripts/prepare_ouro.py
+python scripts/download_weights.py
+python scripts/prepare_data.py
+python -m pytest tests -q
+python -m ouro_repro.train --config configs/mano_smoke.json --output runtime/mano-smoke
+python scripts/run_pilots.py
+python -m ouro_repro.eval_ouro --loops 4 --task arc_challenge --smoke --limit 32 --output runtime/arc-smoke
+```
+
+Commit code/configuration before experiment commands. Output directories must
+not already exist. Full ARC uses its 1,172-item test split; full Winogrande uses
+its 1,267-item labeled validation split, as in lm-eval. Smoke uses ARC validation
+or Winogrande training examples and is not reported as a benchmark result.
+The standard lm-eval prompts are retained, with 25 and 5 examples respectively,
+fixed few-shot seed 1234, no chat template, and no prompt truncation.
+
+`total_ut_steps` is set on both the config and model, and the zero-based final
+exit index is explicitly selected. Hooks verify the number of executed loops.
+We do not interpret a post-hoc exit-head selection as actual compute savings.
+
+For Mano, width=256, heads=4, MLP width=1024, GPT-style pre-norm/GELU blocks,
+RoPE, and tied input/output embeddings are shared across conditions. Uniform
+full binary tree shapes use Catalan sampling; leaves are uniform in F_23 and
+operators are uniform over addition, subtraction, and multiplication. Training
+length is uniform over 1..10 operations; main validation/test use length 10.
+Short-length diagnostics can overlap training and only test basic learning.
+Always predicting zero is also recorded: answer classes are not exactly uniform,
+so 1/23 is not the only relevant no-reasoning baseline.
+
+Pilots have two learning rates per architecture, 2,000 steps, seed 0, and no
+test-set evaluation. The original paper used much larger widths and budgets;
+failure of this pilot is not a refutation of its results.
+
+## Public results and provenance
+
+Sanitized evidence is under `experiments/`. Each GPU run records `run_commit`,
+configuration and dataset hashes, hardware type, precision, duration, peak memory,
+and status. Result/report commits are later than the actual execution commits.
+`scripts/check_public.py` checks staged artifacts before publication. It is a
+screening aid; explicit path staging and human-readable diff review remain required.

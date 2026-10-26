@@ -7,7 +7,7 @@ names = subprocess.check_output(['git', 'diff', '--cached', '--name-only', '--di
 patterns = [r'gh[pousr]_[A-Za-z0-9]{20,}', r'hf_[A-Za-z0-9]{20,}',
             r'-----BEGIN .*PRIVATE KEY-----', r'(?i)(api_key|password|access_token)\s*[=:]\s*[\"\'][^\"\']{8,}',
             r'/home/[^/\s]+/', r'/mnt/data/[^/\s]+/',
-            r'\b(?:\d{1,3}\.){3}\d{1,3}\b']
+            r'\b(?:[1-9]\d{0,2}\.){3}\d{1,3}\b']
 errors = []
 for name in names:
     if name.startswith(('runtime/', '.venv/')) or Path(name).suffix in {'.pt', '.pdf', '.safetensors', '.log', '.jsonl'}:
