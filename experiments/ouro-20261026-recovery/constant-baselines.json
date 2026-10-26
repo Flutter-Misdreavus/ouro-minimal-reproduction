@@ -1,0 +1,14 @@
+{
+  "primary_uniform_L10": {
+    "n": 2048,
+    "always_zero_accuracy": 0.0712890625,
+    "most_common_label": 0,
+    "most_common_fraction": 0.0712890625
+  },
+  "legacy_catalan_L10": {
+    "n": 1024,
+    "always_zero_accuracy": 0.0654296875,
+    "most_common_label": 0,
+    "most_common_fraction": 0.0654296875
+  }
+}
