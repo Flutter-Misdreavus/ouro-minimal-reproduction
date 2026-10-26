@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "run_id": "ouro-20261026-composition",
+  "parent_run_id": "ouro-20261026-recovery-data",
+  "ready": true,
+  "hypothesis": "A reduced-difficulty progressive curriculum can establish compositional learning, allowing an interpretable loop-vs-shallow/deep comparison at local scale.",
+  "baseline": "3-layer single-loop width256 model",
+  "intervention": "3 layers x4 loops (same parameters),12 layers x1 loop (same expanded depth)",
+  "dataset": "Uniform-split prefix arithmetic mod23; target maximum4 operations; frozen curriculum1-only then1..2 then1..4",
+  "split": "2048 unique heldout L4 primary validation,1024 heldout L2 secondary,1024 heldout L4 diagnostic; exclude all from training; keep10000 L4 test and original L10 test unscored. L1 diagnostic may be seen.",
+  "primary_metric": "Final-step heldout L4 validation accuracy; L2 validation and L1 fit diagnose learning",
+  "decision_rule": "Learning gate: at least one arm >=50% primary accuracy. Confirm additional seeds1/2 for all arms only if loop >=50% and loop-shallow >=10pp at seed0. Otherwise report exploratory result and stop this bounded stage without a superiority claim. Effective-depth comparisons always report both loop and deep, not just favorable baseline.",
+  "controls": [
+    "same curriculum and train streams",
+    "same step and token counts",
+    "same optimizer and selected atomic LR/precision",
+    "same validation/test and diagnostic hashes",
+    "same width/heads/objective/embedding tying",
+    "all arms start fresh; single local GPU serial runs"
+  ],
+  "seeds": [
+    0
+  ],
+  "code_revision": "clean HEAD at launch; preserve actual run commit",
+  "environment": "V10032GB; project environment; FP32",
+  "experiment_commands": [
+    "python -m scripts.run_matrix --config configs/composition_matrix.json"
+  ],
+  "budget": {
+    "gpu_count": 1,
+    "gpu_hours": 3,
+    "wall_seconds": 10800,
+    "max_attempts": 1,
+    "model_cost_limit": 0
+  },
+  "stop_conditions": [
+    "nonfinite loss or gradient",
+    "OOM",
+    "budget exceeded",
+    "heldout leakage"
+  ],
+  "required_outputs": [
+    "all3 reports/histories",
+    "L2/L4 validation and exposure hashes",
+    "learning curves",
+    "review with actual commits and push status"
+  ],
+  "version_control": {
+    "repository": "Flutter-Misdreavus/ouro-minimal-reproduction",
+    "visibility": "public",
+    "visibility_authorization": "Existing explicit user authorization",
+    "branch": "main",
+    "push_mode": "direct",
+    "checkpoint_minutes": 15
+  }
+}

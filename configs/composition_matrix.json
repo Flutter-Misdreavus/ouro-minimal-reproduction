@@ -1,0 +1,37 @@
+{
+  "run_id": "ouro-20261026-composition",
+  "output_root": "runtime/composition-s0",
+  "wall_seconds": 10800,
+  "runs": [
+    {
+      "name": "shallow_s0",
+      "args": [
+        "-m",
+        "ouro_repro.recover_train",
+        "--config",
+        "configs/composition_shallow_s0.json"
+      ],
+      "timeout_seconds": 3560
+    },
+    {
+      "name": "loop_s0",
+      "args": [
+        "-m",
+        "ouro_repro.recover_train",
+        "--config",
+        "configs/composition_loop_s0.json"
+      ],
+      "timeout_seconds": 3560
+    },
+    {
+      "name": "deep_s0",
+      "args": [
+        "-m",
+        "ouro_repro.recover_train",
+        "--config",
+        "configs/composition_deep_s0.json"
+      ],
+      "timeout_seconds": 3560
+    }
+  ]
+}

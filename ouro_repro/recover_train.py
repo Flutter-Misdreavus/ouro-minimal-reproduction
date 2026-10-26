@@ -15,23 +15,34 @@ from .train import digest, evaluate, revision
 
 
 def build_evaluation(cfg):
-    primary = fixed_set(1729, cfg['validation_size'], 10, tree_distribution='uniform_split')
+    max_ops = cfg.get('task_max_ops', 10)
+    primary = fixed_set(1729, cfg['validation_size'], max_ops, tree_distribution='uniform_split')
     legacy = fixed_set(1729, 1024, 10)
     original_test = fixed_set(2718, 10000, 10, [tuple(x) for x, _ in legacy])
     original_excluded = {tuple(x) for x, _ in primary + legacy + original_test}
-    reserved_test = fixed_set(2718, 10000, 10, original_excluded, 'uniform_split')
+    reserved_test = fixed_set(2718, 10000, max_ops, original_excluded, 'uniform_split')
     excluded = original_excluded | {tuple(x) for x, _ in reserved_test}
     diagnostics = {}
     for length in (1, 2, 4):
-        gen = Generator(9000 + length, 10, 'uniform_split')
-        diagnostics[str(length)] = [gen.sample(length) for _ in range(512)]
+        if cfg.get('holdout_composition_diagnostics', False) and length > 1:
+            examples = fixed_set(9000 + length, 1024, length, excluded, 'uniform_split')
+            excluded.update(tuple(x) for x, _ in examples)
+        else:
+            gen = Generator(9000 + length, 10, 'uniform_split')
+            examples = [gen.sample(length) for _ in range(512)]
+        diagnostics[str(length)] = examples
     return primary, legacy, reserved_test, excluded, diagnostics
 
 
-def sample_training(gen, step, warmup_data_steps, excluded, batch_size):
+def sample_training(gen, step, warmup_data_steps, excluded, batch_size, two_operation_steps=0):
     examples = []
     while len(examples) < batch_size:
-        example = gen.sample(1) if step <= warmup_data_steps else gen.sample()
+        if step <= warmup_data_steps:
+            example = gen.sample(1)
+        elif step <= two_operation_steps:
+            example = gen.sample(gen.rng.randint(1, 2))
+        else:
+            example = gen.sample()
         if tuple(example[0]) not in excluded:
             examples.append(example)
     return examples
@@ -54,7 +65,7 @@ def main():
     model = Model(cfg['layers'], cfg['loops'], cfg['width'], cfg['heads'], 40).cuda()
     initial_sha = hashlib.sha256(b''.join(p.detach().cpu().numpy().tobytes() for p in model.parameters())).hexdigest()
     opt = torch.optim.AdamW(model.parameters(), lr=cfg['lr'], betas=(0.9, 0.98), eps=1e-6, weight_decay=0.1)
-    generator = Generator(10000 + cfg['seed'], 10, cfg['tree_distribution'])
+    generator = Generator(10000 + cfg['seed'], cfg.get('task_max_ops', 10), cfg['tree_distribution'])
     metadata = {'run_id': cfg['run_id'], 'run_commit': commit, 'status': 'RUNNING', 'config': cfg,
                 'config_sha256': hashlib.sha256(Path(args.config).read_bytes()).hexdigest(),
                 'initial_parameters_sha256': initial_sha,
@@ -63,14 +74,17 @@ def main():
                 'heldout_expressions': len(excluded), 'device': torch.cuda.get_device_name(0),
                 'parameter_count': sum(p.numel() for p in model.parameters()),
                 'precision': 'fp32', 'torch': torch.__version__,
-                'diagnostic_note': 'Lengths1/2/4 may overlap training; diagnostic fit, not generalization'}
+                'diagnostic_note': ('Length1 may overlap training; lengths2/4 explicitly excluded'
+                                    if cfg.get('holdout_composition_diagnostics', False)
+                                    else 'Lengths1/2/4 may overlap training; diagnostic fit, not generalization'),
+                'diagnostic_sha256': {k: digest(v) for k, v in diagnostic.items()}}
     (out / 'metadata.json').write_text(json.dumps(metadata, indent=2) + '\n')
     (out / 'config.json').write_text(json.dumps(cfg, indent=2) + '\n')
     started = time.monotonic()
     history = []
     tokens = 0
     stream = hashlib.sha256()
-    length_counts = {str(k): 0 for k in range(1, 11)}
+    length_counts = {str(k): 0 for k in range(1, cfg.get('task_max_ops', 10) + 1)}
     def record(step, loss=None, gradient=None):
         row = {'step': step, 'validation': evaluate(model, primary, 'cuda', False),
                'legacy_validation': evaluate(model, legacy, 'cuda', False),
@@ -84,7 +98,8 @@ def main():
     for step in range(1, cfg['steps'] + 1):
         if time.monotonic() - started > cfg['wall_seconds']:
             raise RuntimeError('Recovery run wall budget exceeded')
-        batch = sample_training(generator, step, cfg['atomic_warmup_steps'], excluded, cfg['batch_size'])
+        batch = sample_training(generator, step, cfg['atomic_warmup_steps'], excluded, cfg['batch_size'],
+                                cfg.get('two_operation_warmup_steps', 0))
         stream.update(json.dumps(batch, separators=(',', ':')).encode())
         tokens += sum(len(x) + 1 for x, _ in batch)
         for x, _ in batch:

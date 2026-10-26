@@ -40,7 +40,10 @@ for stage, source in [('atomic', args.atomic_directory), ('data', args.data_dire
             axes[1].plot(steps, [r['diagnostics']['1']['accuracy'] * 100 for r in history], label=name)
     if not records:
         raise RuntimeError('No successful reports: ' + source)
-    axes[0].set_ylabel('Atomic training accuracy (%)' if stage == 'atomic' else 'Length-10 validation accuracy (%)')
+    lengths = {r['config'].get('task_max_ops', 10) for r in records.values()}
+    assert len(lengths) == 1
+    max_ops = next(iter(lengths))
+    axes[0].set_ylabel('Atomic training accuracy (%)' if stage == 'atomic' else f'Length-{max_ops} validation accuracy (%)')
     axes[1].set_ylabel('Atomic validation accuracy (%)' if stage == 'atomic' else 'Length-1 diagnostic fit (%)')
     for axis in axes:
         axis.set_xlabel('Training steps')

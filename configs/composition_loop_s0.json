@@ -1,0 +1,21 @@
+{
+  "run_id": "ouro-20261026-composition-loop-s0",
+  "seed": 0,
+  "layers": 3,
+  "loops": 4,
+  "width": 256,
+  "heads": 4,
+  "precision": "fp32",
+  "lr": 0.002,
+  "steps": 20000,
+  "batch_size": 256,
+  "warmup_steps": 200,
+  "atomic_warmup_steps": 2000,
+  "two_operation_warmup_steps": 8000,
+  "task_max_ops": 4,
+  "tree_distribution": "uniform_split",
+  "holdout_composition_diagnostics": true,
+  "validation_size": 2048,
+  "eval_every": 1000,
+  "wall_seconds": 3500
+}
