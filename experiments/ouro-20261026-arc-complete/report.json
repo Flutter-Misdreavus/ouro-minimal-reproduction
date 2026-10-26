@@ -1,0 +1,76 @@
+{
+  "run_commit": "2e0cf5f9307ece99519e734fed58f33d949b356b",
+  "upstream": {
+    "model": "ByteDance/Ouro-1.4B",
+    "revision": "574fa66cb8bf5abdc979642d01cf2b79b16bfab1",
+    "license": "apache-2.0",
+    "dataset_revisions": {
+      "allenai/ai2_arc": "210d026faf9955653af8916fad021475a3f00453",
+      "allenai/winogrande": "01e74176c63542e6b0bcb004dcdea22d94fb67b5"
+    }
+  },
+  "task": "arc_challenge",
+  "metrics_by_depth": {
+    "8": {
+      "metrics": {
+        "alias": "arc_challenge",
+        "acc,none": 0.5392491467576792,
+        "acc_stderr,none": 0.014566303676636583,
+        "acc_norm,none": 0.5793515358361775,
+        "acc_norm_stderr,none": 0.01442621125250841
+      },
+      "n": 1172
+    },
+    "1": {
+      "metrics": {
+        "alias": "arc_challenge",
+        "acc,none": 0.36945392491467577,
+        "acc_stderr,none": 0.014104578366491892,
+        "acc_norm,none": 0.3848122866894198,
+        "acc_norm_stderr,none": 0.014218371065251102
+      },
+      "n": 1172
+    },
+    "2": {
+      "metrics": {
+        "alias": "arc_challenge",
+        "acc,none": 0.5179180887372014,
+        "acc_stderr,none": 0.014602005585490976,
+        "acc_norm,none": 0.5494880546075085,
+        "acc_norm_stderr,none": 0.014539646098471627
+      },
+      "n": 1172
+    },
+    "3": {
+      "metrics": {
+        "alias": "arc_challenge",
+        "acc,none": 0.560580204778157,
+        "acc_stderr,none": 0.014503747823580127,
+        "acc_norm,none": 0.5972696245733788,
+        "acc_norm_stderr,none": 0.014332236306790152
+      },
+      "n": 1172
+    },
+    "4": {
+      "metrics": {
+        "alias": "arc_challenge",
+        "acc,none": 0.560580204778157,
+        "acc_stderr,none": 0.014503747823580127,
+        "acc_norm,none": 0.6015358361774744,
+        "acc_norm_stderr,none": 0.014306946052735565
+      },
+      "n": 1172
+    },
+    "6": {
+      "metrics": {
+        "alias": "arc_challenge",
+        "acc,none": 0.5401023890784983,
+        "acc_stderr,none": 0.014564318856924848,
+        "acc_norm,none": 0.5844709897610921,
+        "acc_norm_stderr,none": 0.014401366641216379
+      },
+      "n": 1172
+    }
+  },
+  "status": "SCORES_COMPLETE_PENDING_FINAL_REVIEW"
+}
