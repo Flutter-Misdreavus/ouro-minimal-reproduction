@@ -3,6 +3,21 @@
 An independent, local reproduction attempt of **Scaling Latent Reasoning via
 Looped Language Models**, arXiv:2510.25741v6 (2026-10-11).
 
+## Released-weight result
+
+The full six-depth sweep reproduced the reported rise through four loops and
+decline at six/eight loops on both benchmarks. ARC R4 is **60.15%** (paper 60.92%)
+and Winogrande R4 is **70.96%** (paper 72.30%). All twelve measurements are within
+1.82 percentage points of Table 10. The paired R4-minus-R1 gains are +21.67 and
++14.60 points. R4 has the highest point estimates, but its advantage over R3 is
+not established by the paired intervals.
+
+See the [review and full table](experiments/ouro-20261026-depth-full/review.md),
+[curves](experiments/ouro-20261026-depth-full/depth-curves.png), and
+[paired intervals](experiments/ouro-20261026-depth-full/paired-comparisons.json).
+The small-model training comparison is still in progress; its pilot did not
+establish learning on the hardest expressions.
+
 ## Scope
 
 1. Evaluate the released `ByteDance/Ouro-1.4B` base checkpoint at recurrent
@@ -52,6 +67,21 @@ python -m ouro_repro.train --config configs/mano_smoke.json --output runtime/man
 python scripts/run_pilots.py
 python -m ouro_repro.eval_ouro --loops 4 --task arc_challenge --smoke --limit 32 --output runtime/arc-smoke
 ```
+
+After the correctness and smoke gates pass, the committed full-evaluation
+supervisor uses an eight-hour ceiling:
+
+```bash
+python -m scripts.run_matrix --config configs/depth_shared_full.json
+python scripts/report_results.py --depth-directory runtime/shared-depth-formal/full --output runtime/depth-analysis
+```
+
+The full scorer reuses intermediate states from an eight-loop pass and verifies
+them against separate truncated forwards. Its timing is a combined sweep cost,
+not per-depth latency. For the extended single-seed training comparison, run the
+three `configs/mano_extended_{shallow,loop,deep}_s0.json` configurations with
+`python -m ouro_repro.train --config ... --output ...` in separate new output
+directories. Run GPU workloads sequentially. A clean Git working tree is required.
 
 Commit code/configuration before experiment commands. Output directories must
 not already exist. Full ARC uses its 1,172-item test split; full Winogrande uses
