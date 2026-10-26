@@ -1,0 +1,79 @@
+{
+  "run_id": "ouro-20261026-recovery-catalan_primed",
+  "run_commit": "4b57e189c93b7c5e1a6c247abbf0708ffc27f621",
+  "status": "SUCCEEDED",
+  "config": {
+    "run_id": "ouro-20261026-recovery-catalan_primed",
+    "seed": 0,
+    "layers": 3,
+    "loops": 1,
+    "width": 256,
+    "heads": 4,
+    "precision": "fp32",
+    "lr": 0.002,
+    "steps": 12000,
+    "batch_size": 256,
+    "warmup_steps": 200,
+    "atomic_warmup_steps": 2000,
+    "tree_distribution": "catalan",
+    "validation_size": 2048,
+    "eval_every": 1000,
+    "wall_seconds": 1800
+  },
+  "config_sha256": "d79d1a5eae3b1a857f8130bb877f6d718edccc21f5c3d487859a3b95d0aab6ed",
+  "initial_parameters_sha256": "52f60594ffab29b5da581ee30a1daff21e7b1b9995b82fda778610e527c89136",
+  "validation_sha256": "890171b4c238ae1fe9eb2aa4d030411e6d991a3f998f7631e53cf486d134c221",
+  "legacy_validation_sha256": "41ecefb70c0007e186619bd8fa1b3ee9afa19aa50f112bcab20066c65e457969",
+  "reserved_test_sha256": "4513c764d0fc49fd773e2e4d5a07e6a45769988ea2dad225068ec4f33d98c07a",
+  "test_evaluated": false,
+  "heldout_expressions": 23072,
+  "device": "Tesla V100-SXM2-32GB",
+  "parameter_count": 2380032,
+  "precision": "fp32",
+  "torch": "2.2.2+cu121",
+  "diagnostic_note": "Lengths1/2/4 may overlap training; diagnostic fit, not generalization",
+  "completed_steps": 12000,
+  "nonpad_tokens": 44546974,
+  "train_stream_sha256": "a575de2325e4654601b9167543232135d899867392e7b624fe4ddfd55fd00d1f",
+  "length_counts": {
+    "1": 768188,
+    "2": 255417,
+    "3": 256293,
+    "4": 255519,
+    "5": 256527,
+    "6": 255970,
+    "7": 255752,
+    "8": 256056,
+    "9": 256437,
+    "10": 255841
+  },
+  "validation": {
+    "accuracy": 0.0791015625,
+    "ce": 3.094321846961975,
+    "n": 2048
+  },
+  "legacy_validation": {
+    "accuracy": 0.0634765625,
+    "ce": 3.089694380760193,
+    "n": 1024
+  },
+  "diagnostics": {
+    "1": {
+      "accuracy": 1.0,
+      "ce": 0.01281730504706502,
+      "n": 512
+    },
+    "2": {
+      "accuracy": 0.21484375,
+      "ce": 2.6177618503570557,
+      "n": 512
+    },
+    "4": {
+      "accuracy": 0.0625,
+      "ce": 3.076709032058716,
+      "n": 512
+    }
+  },
+  "elapsed_seconds": 306.32680267607793,
+  "peak_allocated_bytes": 431252992
+}
