@@ -55,6 +55,7 @@ all_rows, summary = {}, {'verification_commit': commit, 'device': torch.cuda.get
 for path in sorted(Path(a.directory).glob('*/report.json')):
     r = json.loads(path.read_text())
     cfg = r['config']
+    assert cfg['task_max_ops'] == 4 and cfg['holdout_composition_diagnostics']
     state = torch.load(path.with_name('checkpoint.pt'), map_location='cpu', weights_only=False)
     model = Model(cfg['layers'], cfg['loops'], cfg['width'], cfg['heads'], 40).cuda().eval()
     model.load_state_dict(state['model'])
@@ -75,7 +76,8 @@ for path in sorted(Path(a.directory).glob('*/report.json')):
             grouped[key] = groups
         metrics[task] = {'n': len(rows), 'accuracy': accuracy, 'groups': grouped}
         all_rows[path.parent.name][task] = rows
-        (out / f'{path.parent.name}-{task}-paired.json').write_text(json.dumps(rows, indent=2) + '\n')
+        public_rows = [{'doc_hash': x['doc_hash'], 'correct': x['correct']} for x in rows]
+        (out / f'{path.parent.name}-{task}-paired.json').write_text(json.dumps(public_rows, indent=2) + '\n')
     summary['runs'][path.parent.name] = {'run_commit': r['run_commit'], 'metrics': metrics}
     del model
     torch.cuda.empty_cache()
