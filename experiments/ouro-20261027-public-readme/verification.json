@@ -1,0 +1,31 @@
+{
+  "run_id": "ouro-20261027-public-readme",
+  "status": "PASSED",
+  "scope": "Public README, original vector cover, selected result figures and sanitized metrics only; no training code or weights published.",
+  "public_base_commit": "a0d34bafd81506a0b9ee48429d47e4f8adeee704",
+  "github_markdown_render": {
+    "status": "PASSED",
+    "tables": 10,
+    "foldouts": 3,
+    "images": 8,
+    "all_explicit_anchors_found": true
+  },
+  "checks": [
+    "All relative links exist",
+    "Command targets exist in public checkout",
+    "Nine seed scores and full metrics match audited source",
+    "Source artifact hashes match",
+    "SVG contains no script or foreignObject",
+    "Cover PNG preview visually reviewed",
+    "Training-code availability and paper-scale limits explicit",
+    "Staged public artifact scan passed for all seven files"
+  ],
+  "file_sha256": {
+    "README.md": "0a870e886bbe7f0bb911997b8923168a7a7b42eb6079cd2f292861178bb36a64",
+    "docs/assets/ouro-header.svg": "a88e9ece2b02fbd26af940fcbd736625ffcf9ca22029bb52225411219215c01a",
+    "docs/assets/repair-confirmation.png": "7f15f3f36c38b3e524641961b18267c4994d2e878ffe0f070bc75387013ec461",
+    "docs/assets/repair-confirmation.svg": "483acfada2a628a5ecabdc03e1c467044156d3a05b56ad4d6bdd32b018d7ec6b",
+    "docs/assets/repair-training-dynamics.png": "56ca504b90a4035ae53f9ef48ab0b7b73359a428111be81e65e34bb320724c9a",
+    "experiments/ouro-20261027-public-readme/repair-summary.json": "dfe41fe446f6b962c7dde22f81e6747b52c36a6ea641e728293572df246d5ac5"
+  }
+}

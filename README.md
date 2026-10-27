@@ -1,39 +1,71 @@
 <div align="center">
 
+<img src="docs/assets/ouro-header.svg" alt="Ouro：共享三层 Transformer，循环四次；公开权重评估、三种子训练对照与独立审计" width="100%">
+
 # Ouro · Minimal Reproduction
 
-**Scaling Latent Reasoning via Looped Language Models**<br>
-在一张 V100 上，验证循环深度的收益，并尝试从头训练一个最小对照。
+**让循环深度的收益，经得起对照与复核。**
 
-[![Paper](https://img.shields.io/badge/arXiv-2510.25741v6-B31B1B?style=flat-square)](https://arxiv.org/abs/2510.25741v6)
+[![Paper](https://img.shields.io/badge/Paper-arXiv%202510.25741-B31B1B?style=flat-square)](https://arxiv.org/abs/2510.25741v6)
 [![Python](https://img.shields.io/badge/Python-3.10-3776AB?style=flat-square)](#quickstart)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.2.2-EE4C2C?style=flat-square)](requirements.txt)
-[![Hardware](https://img.shields.io/badge/GPU-1%C3%97_V100_32GB-76B900?style=flat-square)](#resources)
+[![Hardware](https://img.shields.io/badge/Hardware-1%C3%97%20V100%2032GB-167B99?style=flat-square)](#resources)
 
-[实验结果](#results) · [追加诊断](#recovery) · [方法与对照](#method) · [快速复现](#quickstart) · [实验记录](#evidence) · [结论边界](#limitations)
+[核心结果](#results) · [问题与修复](#diagnosis) · [实验设计](#protocol) · [快速开始](#quickstart) · [证据索引](#evidence) · [结论边界](#limits)
 
 </div>
 
 ---
 
-> **当前结论**：公开权重的循环深度趋势已复现。首轮小模型学习不足；追加 11 组训练后，在缩小的四次运算任务上观察到循环模型 **24.66%**、浅层 **9.08%**、深层 **9.47%** 的单种子差异。完整论文训练结论仍未复现，以下保留各阶段证据与局限。
+本项目是论文 **Scaling Latent Reasoning via Looped Language Models** 的独立、非官方复现。围绕两个问题展开：同一个公开模型增加循环次数，表现会怎样变化？从头训练时，共享权重的循环结构能否带来稳定的组合收益？
 
-这是论文的**独立、非官方最小复现**，包含两条实验线：
+| 公开权重 · 深度扫描 | 小型 Mano · 三种子确认 | 可靠性 · 独立核验 |
+|:---:|:---:|:---:|
+| **2 项基准 × 6 个深度** | **Loop 91.78%** | **36 份检查点通过** |
+| 四次循环取得最高实测分数 | 相对浅层平均 **+40.13 pp** | 全部正式模型基础运算 **100%** |
 
-| 实验线 | 核心问题 | 本轮结果 |
-|---|---|---|
-| **公开权重验证** | 同一 Ouro-1.4B 检查点，增加循环次数是否改善表现？ | 两项完整基准均重现先升后降的深度趋势 |
-| **小模型训练对照** | 共享权重循环，是否优于同参数量或同展开深度模型？ | 追加诊断恢复短组合学习，出现单种子收益迹象；尚未通过确认阶段门 |
+> **2026-10-27 更新**：修复基础学习故障后，九组训练均完成固定 80k 步。Loop 在三个新种子上均优于同参数量浅层模型；相对深层模型有种子反例。确认结果来自 **width256、L4 的缩小任务**，不等于完成论文全尺度训练。
 
 <a id="results"></a>
 
-## 01 · 实验结果
+## 01 / 核心结果
 
-### 公开权重：四次循环达到最高实测分数
+### 共享权重，稳定超过同参数量浅层基线
 
-使用 `ByteDance/Ouro-1.4B` **Base**，评估 1、2、3、4、6、8 次循环。下表单位为百分比；论文数值来自 Table 10。
+Mano 使用模 23 的前缀算术表达式。这里的 **L4 表示四次运算**，3×4 表示同一组 3 层 Transformer 循环 4 次。每个模型使用新的 10,000 题留出测试集，统一取 80,000 步终点，不挑最佳种子或最佳检查点。
 
-| 循环次数 | ARC · 本地 | ARC · 论文 | Winogrande · 本地 | Winogrande · 论文 |
+| 模型 | 参数量 | Seed 3 | Seed 4 | Seed 5 | 均值 ± 种子标准差 |
+|---|---:|---:|---:|---:|---:|
+| Shallow · 3×1 | 2.38M | 35.80% | 62.51% | 56.66% | 51.66 ± 14.04% |
+| **Loop · 3×4** | **2.38M** | **90.52%** | **97.26%** | **87.57%** | **91.78 ± 4.97%** |
+| Deep · 12×1 | 9.49M | 65.39% | 92.42% | 96.18% | 84.66 ± 16.80% |
+
+<img src="docs/assets/repair-confirmation.png" alt="三个新种子的固定终点测试：Loop 均优于 Shallow，但 seed5 的 Deep 更好；非零根乘法子集仍保留优势" width="100%">
+
+Loop−Shallow 分别为 **+54.72、+34.75、+30.91 个百分点**，通过预设的“每种子为正、平均至少 +10 pp”规则。Loop−Deep 则为 +25.13、+4.84、−8.61 pp：**循环模型并非在每个种子上都胜过深层模型。**
+
+[机器可读结果与协议](experiments/ouro-20261027-public-readme/repair-summary.json) · [矢量图 SVG](docs/assets/repair-confirmation.svg)
+
+### 优势集中在哪里？
+
+下表是三个种子的准确率均值。各模型使用相同题目，题数按单个种子计。
+
+| 测试子集 | 题数 | Shallow | Loop | Deep |
+|---|---:|---:|---:|---:|
+| 根节点为乘法 | 3,388 | 35.87% | **96.24%** | 75.82% |
+| 根乘法，两个操作数均非零 | 3,041 | 30.18% | **95.89%** | 73.79% |
+| 根乘法，至少一个操作数为零 | 347 | 85.78% | **99.33%** | 93.56% |
+| 四个运算全部为乘法 | 131 | 94.66% | **99.49%** | 97.71% |
+
+根乘法上的平均增益为 **+60.37 pp**，比非乘法根节点的增益大 **30.62 pp**，通过预设乘法特异性规则。排除零操作数后优势仍在；纯乘法题则三种模型都很强。差异更多出现在**混合加减乘的组合**，不能概括为“所有乘法题都同样困难”。
+
+将左右子树都替换成正确数值后，九个模型均达到 100%。这与基础运算已经掌握一致，但替换会缩短表达式并可能产生训练见过的题，只能作为定位证据。
+
+### 公开 Ouro-1.4B：循环深度呈先升后降趋势
+
+对同一个 `ByteDance/Ouro-1.4B` **Base** 检查点评估 1、2、3、4、6、8 次循环。下面对照论文 Table 10；单位为百分比。
+
+| 循环次数 | ARC-C · 本地 | ARC-C · 论文 | Winogrande · 本地 | Winogrande · 论文 |
 |:---:|---:|---:|---:|---:|
 | 1 | 38.48 | 37.63 | 56.35 | 56.99 |
 | 2 | 54.95 | 54.86 | 66.38 | 66.69 |
@@ -42,140 +74,86 @@
 | 6 | 58.45 | 59.73 | 69.69 | 71.03 |
 | 8 | 57.94 | 58.19 | 68.35 | 69.30 |
 
-![公开权重的循环深度曲线：本地测量与论文 Table 10 对比](experiments/ouro-20261026-depth-full/depth-curves.png)
+<img src="experiments/ouro-20261026-depth-full/depth-curves.png" alt="公开模型的循环深度曲线：本地与论文都在四次循环附近达到最高点，继续增加循环后下降" width="100%">
 
-**12 个测量点与论文的差异均不超过 1.82 个百分点。** 四次相对一次循环，ARC 提升 **21.67** 个百分点，Winogrande 提升 **14.60** 个百分点；继续增加到八次则出现下降。
-
-| 配对差值 | ARC · 差值与 95% 区间 | Winogrande · 差值与 95% 区间 |
-|---|---:|---:|
-| R4 − R1 | +21.67 [18.86, 24.66] | +14.60 [11.37, 17.84] |
-| R4 − R3 | +0.43 [−0.68, 1.62] | +1.42 [−0.16, 3.00] |
-| R8 − R4 | −2.22 [−3.58, −0.85] | −2.60 [−4.42, −0.79] |
-
-区间由逐题配对 bootstrap 得到，重采样 10,000 次。**四次的点估计最高，但尚不能断言四次显著优于三次。** 区间描述题目采样的不确定性，未经多重比较校正，也不代表训练种子间的方差。
-
-[完整审查](experiments/ouro-20261026-depth-full/review.md) · [机器可读指标](experiments/ouro-20261026-depth-full/depth-report.json) · [配对统计](experiments/ouro-20261026-depth-full/paired-comparisons.json) · [矢量图 SVG](experiments/ouro-20261026-depth-full/depth-curves.svg)
-
-### 首轮小模型：对照完成，学习信号不足
-
-在模 23 的前缀算术任务 Mano 上，三组模型均从头训练 **20,000 步**，各消耗相同的 **81,929,878 个非填充 token**、**5,120,000 道表达式**。以下为固定训练终点的长度 10 验证准确率，未挑选曲线中的最高点。
-
-| 模型 | 结构 | 参数量 | 验证准确率 | 对照目的 |
-|---|:---:|---:|---:|---|
-| Shallow | 3 层 × 1 次 | 2.38M | 7.13% | 同参数量基线 |
-| Loop | 3 层 × 4 次 | 2.38M | 6.74% | 共享权重循环 |
-| Deep | 12 层 × 1 次 | 9.49M | 7.62% | 同展开计算深度基线 |
-| Always zero | 始终预测 0 | — | 6.54% | 答案分布基线 |
-
-![三组小模型的验证准确率与交叉熵曲线](experiments/ouro-20261026-mano-extended/training-curves.png)
-
-三组曲线均接近基线，短表达式诊断也显示基本算术学习不足。因此，本轮**未建立循环结构的训练优势**；这也不能用于否定论文。当前结果仅为单种子探索，未追加多种子确认，预留的 10,000 道测试题未评分。
-
-[训练审查与局限](experiments/ouro-20261026-mano-extended/review.md) · [代码及配置审计](experiments/ouro-20261026-mano-extended/provenance-audit.json) · [矢量图 SVG](experiments/ouro-20261026-mano-extended/training-curves.svg)
-
-<a id="recovery"></a>
-
-### 追加诊断：从基本运算拟合，推进到组合学习
-
-新增 **11 组正式训练**，按三个阶段检查首轮失败原因：
-
-| 阶段 | 对照 | 观察与决定 |
-|---|---|---|
-| 单步学习 | 2 档学习率 × FP16/FP32 | 四组均能拟合训练集到 100%；没有证据把失败简单归因于 FP16 |
-| 长度 10 数据对照 | 原树分布/官方式分布 × 有无单步预热 | 主验证准确率仍为 6.74%–7.91%，未通过有效学习门槛 |
-| 缩小的组合任务 | 浅层/循环/深层，统一渐进课程 | 三组都恢复短组合学习，循环模型在此单种子设置中表现更好 |
-
-还确认了一个分布偏差：原始 Mano 作者代码均匀采样左右子树的运算数划分，首轮代码均匀采样完整树形状。10 次运算时平均树高分别为 **5.64** 和 **7.07**。现在已增加 `uniform_split` 选项，并保留原默认数据流用于历史重放；修正分布本身尚不足以恢复长度 10 的学习。
-
-新的机制试验将任务缩为最多 **4 次运算**，三组均训练 20,000 步，采用相同的“单步 → 最多两步 → 最多四步”课程和数据流。
-
-| 模型 | 参数量 | 两步保留验证集 | 四步主验证集 |
-|---|---:|---:|---:|
-| Shallow · 3 层 × 1 次 | 2.38M | 64.06% | 9.08% |
-| **Loop · 3 层 × 4 次** | **2.38M** | **76.37%** | **24.66%** |
-| Deep · 12 层 × 1 次 | 9.49M | 57.91% | 9.47% |
-| 始终答 0 | — | 7.03% | 6.59% |
-
-![渐进课程下的四步主验证、两步保留验证和单步拟合曲线](experiments/ouro-20261026-recovery/architecture-curves.png)
-
-三个检查点的六项 L2/L4 分数均通过独立复算。四步任务上，循环模型相对浅层和深层分别提升 **15.58**、**15.19** 个百分点；答案非零的题目上准确率为 **22.58%**，改善并非仅靠多预测零。
-
-**这仍是探索性结果。** 任务难度与原论文不同，只有一个种子，超参数不保证对每种架构分别最优。循环模型未达到预设的 50% 有效学习门槛，因此没有追加多种子确认，长度 10 和长度 4 的预留测试集都未评分。曲线支持继续研究训练预算与组合学习，不支持宣称完整复现成功。
-
-[失败分析与完整审查](experiments/ouro-20261026-recovery/review.md) · [单步对照](experiments/ouro-20261026-recovery/atomic-review.md) · [数据对照](experiments/ouro-20261026-recovery/data-review.md) · [逐题复算及配对区间](experiments/ouro-20261026-recovery/composition-verification.json) · [版本审计](experiments/ouro-20261026-recovery/composition-source-audit.json)
+12 个测量点与论文差异均不超过 **1.82 pp**。四次相对一次，ARC-C 提升 21.67 pp，Winogrande 提升 14.60 pp；但四次相对三次的配对区间包含零，不能声称四次显著更好。
 
 <details>
-<summary><strong>重放追加诊断与组合试验</strong></summary>
-
-仅运行这些合成任务时，可跳过公开权重与 ARC/Winogrande 数据下载。安装环境后，在干净工作区中按阶段运行、检查报告，再进入下一阶段；输出目录应是新目录。
-
-```bash
-python -m scripts.run_matrix --config configs/atomic_matrix.json
-python -m scripts.run_matrix --config configs/recovery_data_matrix.json
-python -m scripts.run_matrix --config configs/composition_matrix.json
-
-python scripts/report_recovery.py \
-  --atomic-directory runtime/atomic-probe \
-  --data-directory runtime/recovery-data \
-  --architecture-directory runtime/composition-s0 \
-  --output runtime/recovery-analysis
-
-python -m scripts.verify_composition \
-  --directory runtime/composition-s0 \
-  --output runtime/composition-verification
-```
-
-11 组正式训练报告记录的训练/评估耗时合计约 **62.6 分钟**，不含准备、CPU 检查、GPU 冒烟与独立重新评分。任务书中的预算上限、原始运行提交和阶段决定均保留在 `experiments/ouro-20261026-recovery/`。
-
-</details>
-
-<a id="method"></a>
-
-## 02 · 方法与对照
-
-本节描述首轮协议；追加诊断的树分布、课程和更小的任务难度见[追加诊断](#recovery)，两轮结果分别解释。
-
-循环模型在隐状态中重复应用同一组 Transformer 参数，让一个 token 在输出前经历更多计算。
-
-```mermaid
-flowchart LR
-    X[输入 token] --> E[Embedding]
-    E --> B[共享 Transformer 层组]
-    B -->|隐状态回流，共 R 次| B
-    B -->|最后一次循环| H[输出头]
-    H --> Y[答案或候选项得分]
-```
-
-### 公开权重评估协议
+<summary><strong>查看评估协议与配对不确定性</strong></summary>
 
 | 项目 | ARC-Challenge | Winogrande |
 |---|---|---|
-| 数据划分 | Test，1,172 题 | 有标签 Validation，1,267 题 |
+| 划分与题数 | Test · 1,172 | 有标签 Validation · 1,267 |
 | Few-shot | 25-shot | 5-shot |
-| 指标 | `acc_norm` | `acc` |
-| 提示与采样 | 标准 lm-eval 模板，few-shot seed = 1234 | 标准 lm-eval 模板，few-shot seed = 1234 |
+| 指标 | acc_norm | acc |
+| Few-shot seed | 1234 | 1234 |
 
-不使用 chat template，不截断提示。模型以 FP16 计算，候选项的 log-softmax 使用 FP32。
+使用标准 lm-eval 模板，不使用 chat template，不截断提示。模型 FP16，候选项 log-softmax 为 FP32。
 
-完整扫描复用一次八循环前向中的中间状态，得到六个深度的分数。进入正式评估前，每个深度均与独立截断的 HFLM 前向核对：8 个校准候选请求的似然差为 0；另外 32 道 ARC 小样本的 R4 正确性记录也完全一致。
+| 差值 | ARC-C · 95% 配对区间 | Winogrande · 95% 配对区间 |
+|---|---:|---:|
+| R4−R1 | +21.67 [18.86, 24.66] | +14.60 [11.37, 17.84] |
+| R4−R3 | +0.43 [−0.68, 1.62] | +1.42 [−0.16, 3.00] |
+| R8−R4 | −2.22 [−3.58, −0.85] | −2.60 [−4.42, −0.79] |
 
-独立深度评分器同时设置 config 与 model 的 `total_ut_steps`，明确指定从零开始的最终退出位置，并通过 hook 检查实际循环次数。**完整扫描的总耗时不能解释为各深度的独立延迟，也没有验证动态提前退出的加速效果。**
+区间来自逐题配对 bootstrap，重采样 10,000 次，未经多重比较校正；它描述题目采样不确定性，不代表训练种子方差。
 
-### 小模型训练协议
+扫描复用一次八循环前向的中间状态，六个深度分别与独立截断前向核验。因此扫描总耗时不代表各深度独立推理延迟，也不验证动态退出的加速效果。
 
-统一使用宽度 256、4 个注意力头、MLP 宽度 1024、RoPE、GPT 风格 pre-norm/GELU，以及绑定的输入与输出嵌入。训练长度均匀采样 1–10 次运算；验证只使用最难的长度 10。表达式以 Catalan 计数均匀采样二叉树形状，运算符为 `+`、`−`、`×`，数值属于 F₂₃。
+[完整评估审查](experiments/ouro-20261026-depth-full/review.md) · [逐项指标](experiments/ouro-20261026-depth-full/depth-report.json) · [配对统计](experiments/ouro-20261026-depth-full/paired-comparisons.json)
 
-每道表达式独占一行，不进行样本拼接；输入中不含答案，只监督最终单 token 答案。三组共享数据流及保留集，采用相同的优化器、批量和训练日程。每组先进行两档学习率的 2,000 步 pilot，再依据验证交叉熵选择 `2e-4`，从头完成 20,000 步扩展。
+</details>
+
+<a id="diagnosis"></a>
+
+## 02 / 从失败到可比较的实验
+
+最初的多种子循环模型曾明显落后。排查发现，一些失败模型把模 23 中的 `a` 与 `−a` 学成近乎相同的表示，完整单步运算表只答对约 **37.6%**。基础数字区分已经丢失，继续增加组合训练步数不足以解释为架构能力差异。
+
+| 排查环节 | 证据 | 后续处理 |
+|---|---|---|
+| 对照论文 | 旧峰值 LR=0.002，是论文 Mano 搜索上限的 4 倍；warmup 更短 | 优先隔离学习率影响 |
+| 单变量控制 | 只降低峰值 LR，两个种子的单步准确率由约 38% 提升到 97.79% / 99.62% | 支持高 LR 是重要促成因素；一个种子仍未过 99% 门槛 |
+| 共同配方校准 | 三种架构 × 两个开发种子，固定 8k 均达到单步 100% | 冻结配方后再开正式实验 |
+| 新种子确认 | 种子 3/4/5 × 三架构，固定 80k；全部 27 次基础知识检查通过 | 最后统一打开新测试集 |
+
+修复同时调整了学习率、预热、完整衰减日程和课程长度。**正式组合结果不能被解释为仅学习率一个变量的因果效应**，也没有排除初始化或嵌入绑定的影响。
+
+<details>
+<summary><strong>查看全部种子的训练与表示曲线</strong></summary>
+
+<img src="docs/assets/repair-training-dynamics.png" alt="九组训练的原子拟合、L4验证及相反数嵌入余弦曲线；基础知识稳定，组合学习存在种子差异" width="100%">
+
+基础知识门槛检查正常学习，不保证各架构完全收敛或达到最优。浅层模型在后期仍有改善，因此架构差距限于本轮共同配方与固定预算。
+
+</details>
+
+<a id="protocol"></a>
+
+## 03 / 对照如何保持可解释
+
+| 控制项 | 修复后的正式设置 |
+|---|---|
+| 架构 | Shallow 3×1 / Loop 3×4 / Deep 12×1；width256、4 heads |
+| 初始化与数据 | 同种子三架构使用相同训练流；Shallow 与 Loop 初始化相同 |
+| 优化 | AdamW；峰值 LR 0.0005；warmup 1,000；余弦降至 0.00005 |
+| 课程 | 前 8k 单步 → 8k–16k 最多两步 → 16k–80k 最多四步 |
+| 预算 | 每模型 80,000 步、batch256、20.48M 道表达式、FP32 |
+| 留出集 | L4 验证 2,048 / L4 测试 10,000 / L2 开发 1,024；全部排除于训练流 |
+| 可靠性门槛 | 每模型在 8k、16k、80k 的完整单步表准确率 ≥99%；浅层最终 L4 验证 ≥30% |
+| 统计口径 | 保留全部三个新种子；固定终点；预先规定效果规则 |
+
+**执行正确与科学结论分别检查。** 正式实验核验了 36 份检查点、全部 10,000 道测试题的独立算术与结构标签、每模型 278 题 × 4 条件的 CPU 对照，以及全部交叉分组的统计。CPU 抽查共核对 10,008 条正确性记录，不等于在 CPU 上重跑全部测试预测。
 
 <a id="quickstart"></a>
 
-## 03 · 快速复现
+## 04 / 快速开始
 
-以下命令从仓库根目录执行。运行 GPU 实验前保持 Git 工作区干净；修改代码或配置后先提交。各实验输出目录必须是新目录，GPU 任务按顺序执行。
+**当前公开内容**：公开权重评估、早期小模型训练实现及历史证据可以在本仓库运行；最新 80k 修复实验在本次文档发布中提供[结果摘要、协议与核验信息](experiments/ouro-20261027-public-readme/repair-summary.json)及图表，其训练器、审计脚本和模型检查点尚未包含在此公有版本中。下面的命令对应仓库已有代码。
 
-### 1. 安装环境
+### 安装环境
 
-准备 Python 3.10、Git、curl 和可用的 NVIDIA CUDA 环境。下面的安装命令对应本轮使用的 PyTorch CUDA 12.1 构建；`requirements.txt` 不重复安装 PyTorch。
+使用 Python 3.10 和可用的 NVIDIA CUDA 环境；实测设备为 V100 32GB。
 
 ```bash
 git clone https://github.com/Flutter-Misdreavus/ouro-minimal-reproduction.git
@@ -185,38 +163,12 @@ python3.10 -m venv .venv
 source .venv/bin/activate
 python -m pip install torch==2.2.2 --index-url https://download.pytorch.org/whl/cu121
 python -m pip install -r requirements.txt
-
-python -c "import torch; assert torch.cuda.is_available(); print(torch.cuda.get_device_name(0))"
+python -m pytest tests -q
 ```
 
-<details>
-<summary><strong>本轮环境与上游版本</strong></summary>
+### 运行公开权重的深度扫描
 
-| 组件 | 实测版本 |
-|---|---|
-| Python | 3.10.14 |
-| PyTorch / CUDA 构建 | 2.2.2 / 12.1 |
-| Transformers | 4.55.4 |
-| lm-evaluation-harness | 0.4.9.2 |
-| datasets | 3.6.0 |
-| GPU | Tesla V100-SXM2-32GB |
-| 精度 | FP16；训练使用动态梯度缩放；似然 softmax 为 FP32 |
-
-V100 没有原生 BF16 支持。本轮没有测量其他显卡的耗时或最小显存需求。
-
-| 上游资源 | 实际 revision |
-|---|---|
-| `ByteDance/Ouro-1.4B` | `574fa66cb8bf5abdc979642d01cf2b79b16bfab1` |
-| `allenai/ai2_arc` | `210d026faf9955653af8916fad021475a3f00453` |
-| `allenai/winogrande` | `01e74176c63542e6b0bcb004dcdea22d94fb67b5` |
-
-[完整环境清单](experiments/ouro-20261026-mano-extended/environment.json) · [上游版本清单](experiments/ouro-20261026-local-prep/upstream.json)
-
-</details>
-
-### 2. 准备公开权重与数据
-
-`prepare_ouro.py` 会查询上游**运行时的当前 revision**，将其写入 `runtime/upstream.json`，随后按该 revision 下载文件。它并非硬编码本轮版本。下面先核对清单，再继续下载大文件；若核对失败，应先解决版本差异，不能将后续结果视为本轮检查点的重放。
+准备脚本会解析上游**运行时的当前版本**。先与已记录版本比较，再下载大文件；版本不同的运行不能直接称为本轮重放。
 
 ```bash
 python scripts/prepare_ouro.py
@@ -226,150 +178,89 @@ import json
 from pathlib import Path
 expected = json.loads(Path('experiments/ouro-20261026-local-prep/upstream.json').read_text())
 actual = json.loads(Path('runtime/upstream.json').read_text())
-assert actual == expected, 'Upstream revisions changed; resolve the mismatch before replaying.'
-print('Upstream revisions match the published run.')
+assert actual == expected, 'Upstream revisions changed; resolve before replaying.'
 PY
 
 python scripts/download_weights.py
 python scripts/prepare_data.py
-```
-
-模型权重通过上游 SHA256 校验，数据分片进行大小与哈希核验。模型、数据和下载缓存均保存在被 Git 忽略的 `runtime/` 中。
-
-### 3. 先通过正确性与小样本检查
-
-```bash
-python -m pytest tests -q
-
-# 小模型训练冒烟
-python -m ouro_repro.train \
-  --config configs/mano_smoke.json \
-  --output runtime/mano-smoke
-
-# 独立 R4 评分器：32 道 ARC 校准题
-python -m ouro_repro.eval_ouro \
-  --loops 4 --task arc_challenge --smoke --limit 32 \
-  --output runtime/arc-smoke
-
-# 共享中间状态评分器：六个深度的校准与小样本检查
-python -m ouro_repro.sweep_ouro \
-  --smoke --output runtime/shared-depth-smoke
-```
-
-本轮通过了算术标签、前向与梯度等价性、因果遮罩、样本隔离、保存加载，以及上游循环实现兼容性检查。小样本分数只用于校准，不作为正式基准成绩。
-
-### 4. 运行两条实验线
-
-**A · 公开权重完整扫描**
-
-```bash
+python -m ouro_repro.sweep_ouro --smoke --output runtime/shared-depth-smoke
 python -m scripts.run_matrix --config configs/depth_shared_full.json
-
-python scripts/report_results.py \
-  --depth-directory runtime/shared-depth-formal/full \
-  --output runtime/depth-analysis
 ```
 
-监督器按配置限制总墙钟时间为 8 小时。评估输出包含机器可读指标、逐题正确性记录，以及曲线所需的数据。
-
-**B · 小模型 pilot 与三组扩展**
-
-```bash
-python scripts/run_pilots.py
-```
-
-检查 pilot 的损失、学习信号与资源占用后，再执行已冻结的扩展矩阵。下面的配置重放本轮单种子探索，并不保证能让小模型学会任务。
-
-```bash
-python -m scripts.run_matrix --config configs/mano_extended.json
-
-python scripts/report_results.py \
-  --training-directory runtime/mano-extended-r2 \
-  --output runtime/training-analysis
-```
-
-扩展矩阵会依次运行 `shallow_s0`、`loop_s0`、`deep_s0`，总墙钟上限为 3 小时。输出目录已存在时，请使用新的输出配置并先提交，保留旧实验记录。
-
-<a id="resources"></a>
-
-### 本轮资源实测
-
-| 阶段 | 耗时 | 峰值 CUDA allocated 显存 |
-|---|---:|---:|
-| 公开权重完整六深度扫描 | 约 55 分钟 | 约 3.34 GB |
-| 三组 20,000 步训练扩展合计 | 约 40.5 分钟 | 各组约 0.29 / 0.86 / 0.96 GB |
-
-训练耗时不含 pilot、诊断、下载和被取消的启动尝试。显存为 PyTorch 分配量，不是整卡占用或推荐容量；扫描耗时是复用计算后的总成本。
-
-<a id="evidence"></a>
-
-## 04 · 实验记录与可追溯性
-
-```text
-.
-├── configs/                  # 固定实验配置与顺序执行矩阵
-├── ouro_repro/
-│   ├── mano.py               # 模 23 表达式生成器与独立算术 oracle
-│   ├── model.py              # 共享层组的循环 Transformer
-│   ├── train.py              # 训练、验证、版本与数据流记录
-│   ├── eval_ouro.py           # 独立固定深度评分
-│   └── sweep_ouro.py          # 共享中间状态的六深度扫描
-├── scripts/                  # 下载、监督、统计、绘图及公开内容检查
-├── tests/                    # 机制与上游兼容性检查
-├── experiments/              # 已发布的脱敏指标、审查与图表
-└── runtime/                  # 本地权重、数据、日志与检查点；不进入 Git
-```
-
-| 记录 | 内容 |
-|---|---|
-| [准备与实现审查](experiments/ouro-20261026-local-prep/implementation-review.md) | 数据生成、标签、因果性与梯度检查 |
-| [训练 pilot](experiments/ouro-20261026-mano-pilot/review.md) | 六次 pilot 的结论及扩展决策 |
-| [启动修正记录](experiments/ouro-20261026-mano-pilot/launch-correction.md) | 被取消的尝试与干净工作区检查修复 |
-| [评分器验收](experiments/ouro-20261026-depth-smoke/review.md) | 独立评分与共享状态评分的数值对照 |
-| [公开权重完整结果](experiments/ouro-20261026-depth-full/review.md) | 六深度指标、配对区间与解释 |
-| [小模型完整结果](experiments/ouro-20261026-mano-extended/review.md) | 三组曲线、学习诊断与停止决策 |
+运行前保持 Git 工作区干净；修改配置后先提交。输出目录需使用新目录，以保留此前结果。
 
 <details>
-<summary><strong>实际运行提交与版本审计</strong></summary>
+<summary><strong>历史小模型实验、环境版本与报告生成</strong></summary>
 
-| 运行 | 实际执行 commit |
+只运行合成算术任务时，无需下载 Ouro 权重或 ARC/Winogrande 数据。以下重放的是早期 20k 单种子探索，**不对应上方最新 80k 测试分数**。
+
+```bash
+python -m ouro_repro.train --config configs/mano_smoke.json --output runtime/mano-smoke
+python -m scripts.run_matrix --config configs/atomic_matrix.json
+python -m scripts.run_matrix --config configs/recovery_data_matrix.json
+python -m scripts.run_matrix --config configs/composition_matrix.json
+python -m scripts.verify_composition --directory runtime/composition-s0 --output runtime/composition-verification
+```
+
+公开权重扫描完成后，可生成本地报告：
+
+```bash
+python scripts/report_results.py --depth-directory runtime/shared-depth-formal/full --output runtime/depth-analysis
+```
+
+| 组件 | 已记录版本 |
 |---|---|
-| 公开权重完整扫描 | `2e0cf5f9307ece99519e734fed58f33d949b356b` |
-| Shallow 扩展 | `53fddb301c96a870a008fd034c5671ec7f819911` |
-| Loop 扩展 | `27635750e1750b5b53b68492857c91d43c2a8f69` |
-| Deep 扩展 | `2ddb73ddcbc83be0c43b7c07764cedd20b41f156` |
+| PyTorch / CUDA 构建 | 2.2.2 / 12.1 |
+| Transformers | 4.55.4 |
+| lm-evaluation-harness | 0.4.9.2 |
+| Ouro-1.4B revision | `574fa66cb8bf5abdc979642d01cf2b79b16bfab1` |
 
-运行期间有独立的评估与报告工作提交，因此各运行 SHA 不同。审计已核对三组训练所使用的 `train.py`、`model.py`、`mano.py` 内容完全一致，并验证配置、保留集和训练数据流哈希。
-
-每个报告保留实际 `run_commit`；后续文档提交不替代原始运行版本。检查点哈希可用于本地核验，权重本身不公开上传。
+[完整环境](experiments/ouro-20261026-mano-extended/environment.json) · [上游版本清单](experiments/ouro-20261026-local-prep/upstream.json)
 
 </details>
 
-本仓库公开原始实现、配置和脱敏证据。凭据、私有路径、原始数据、模型权重、环境目录、原始日志和论文 PDF 均不提交。发布前显式暂存目标文件，检查差异，并运行 `python scripts/check_public.py`；该脚本辅助筛查，不能替代人工审查。
+<a id="evidence"></a>
 
-<a id="limitations"></a>
+## 05 / 证据与目录
 
-## 05 · 结论边界
+| 从哪里开始 | 内容 |
+|---|---|
+| [最新修复实验摘要](experiments/ouro-20261027-public-readme/repair-summary.json) | 三种子分数、四种子树条件、协议、核验范围、实际运行提交与来源哈希 |
+| [公开权重评估](experiments/ouro-20261026-depth-full/review.md) | 六个循环深度的分数、对照与统计解释 |
+| [首轮训练审查](experiments/ouro-20261026-mano-extended/review.md) | 学习信号不足的原始结果与局限 |
+| [早期恢复实验](experiments/ouro-20261026-recovery/review.md) | 11 组诊断、树分布修正与单种子组合实验 |
+| [实现与正确性](experiments/ouro-20261026-local-prep/implementation-review.md) | 算术标签、注意力、梯度与保存加载检查 |
 
-- **覆盖范围**：本轮验证一个公开 Base 检查点在两项基准上的深度趋势，并完成缩小版 Mano 对照；没有复现完整 7.7T-token 预训练、全套评测或 SOTA 对比。
-- **统计解释**：四次相对一次的提升、八次相对四次的下降有配对区间支持；四次优于三次的证据仍不足。
-- **训练机制**：小模型只使用最终答案交叉熵，没有复现自适应退出门或熵正则训练。单种子结果不能形成确认性的架构结论。
-- **尺度差异**：论文 Mano 使用宽度 1024；最容易的长度 10 设置训练 80,000 步、采用打包上下文。本轮宽度 256、训练 20,000 步，token 预算约为其 1/128。
-- **深度外推**：公开模型早期预训练使用过八次循环，之后切换为四次；不能把超过四次称为完全未见过的循环深度。
-- **后续方向**：先在较简单的验证任务上建立可靠学习信号，再冻结新的长度 10 对照，完成多种子确认后使用预留测试集。
+```text
+configs/        固定配置与顺序运行矩阵
+ouro_repro/     循环模型、算术数据、训练与公开权重评分
+scripts/        准备、调度、统计与复核工具
+tests/          实现正确性检查
+experiments/    历史实验记录、最新结果摘要与脱敏证据
+docs/           首页封面与结果图表
+runtime/        本地数据、权重与运行产物，不进入 Git
+```
 
-## 参考资料
+<a id="resources"></a>
 
-- [Scaling Latent Reasoning via Looped Language Models · arXiv:2510.25741v6](https://arxiv.org/abs/2510.25741v6)，2026-10-11。
-- [ByteDance / Ouro-1.4B](https://huggingface.co/ByteDance/Ouro-1.4B)，本轮使用的公开 Base 模型。
-- [EleutherAI / lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness)，标准提示模板与评估协议。
+所有实验均在单张 V100 32GB 上运行。公开权重共享前向扫描约 **55 分钟**；九模型正式修复流水线约 **7.60 小时**，包含测试与阶段发布，另有约 **25 分钟**的配方校准。这些是实测墙钟时间，不是独立推理延迟，也不代表最低显存要求。
+
+<a id="limits"></a>
+
+## 06 / 结论边界
+
+- **规模**：小型确认实验为 width256、L4；论文 Mano 为 width1024、L10/16/24，并使用 BF16、打包上下文。相同步数不意味着相同 token 或计算预算。
+- **对照**：Loop 与 Shallow 参数量相同，但展开计算更多；与 Deep 展开层数相同，但参数量不同。结果不构成相同 FLOPs 下的优势证明。
+- **统计**：三个种子说明本协议下的稳定性，不能替代大规模训练种子统计；基础拟合门槛也不证明最优调参或完全收敛。
+- **机制**：子树真值替换用于定位组合困难，不能单凭这些分数证明唯一内部机制。纯乘法子集仅 131 题，需要保留其样本规模边界。
+- **覆盖**：没有复现完整 7.7T-token 预训练、全套基准或自适应退出的速度收益。公开模型训练期间曾使用八次循环，超过四次不等于完全未见过的深度。
 
 ---
 
 <div align="center">
 
-**让每个结论，都能追溯到一次真实运行。**
+**每个结论，都有对应的对照、指标与边界。**
 
-[查看评估证据](experiments/ouro-20261026-depth-full/review.md) · [查看训练证据](experiments/ouro-20261026-mano-extended/review.md)
+[阅读论文](https://arxiv.org/abs/2510.25741v6) · [ByteDance / Ouro-1.4B](https://huggingface.co/ByteDance/Ouro-1.4B) · [lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness)
 
 </div>
